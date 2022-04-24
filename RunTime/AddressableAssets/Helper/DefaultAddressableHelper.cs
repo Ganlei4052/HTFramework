@@ -212,10 +212,10 @@ namespace HT.Framework
             {
                 handle = Addressables.LoadAssetAsync<T>(info.AssetReferenceValue);
             }
-            
+
             if (handle.Status == AsyncOperationStatus.Failed)
             {
-                Log.Error("info:"+info.AssetReferenceName);
+                Log.Error("info:" + info.AssetReferenceName);
                 throw new HTFrameworkException(HTFrameworkModule.Addressable,
                     handle.OperationException.Message);
             }
@@ -231,7 +231,7 @@ namespace HT.Framework
                 asset = handle.Result as Object;
                 if (asset != null)
                 {
-                    AssetCache.Add(info.AssetReferenceName,handle);
+                    AssetCache.Add(info.AssetReferenceName, handle);
                     onLoadDone?.Invoke(asset as T);
                 }
                 else
@@ -297,22 +297,19 @@ namespace HT.Framework
             _isLoading = false;
         }
 
-        public IEnumerator UnLoadAsset(string address, bool unloadAllLoadedObjects = false)
+        public void UnLoadAsset(string address, bool unloadAllLoadedObjects = false)
         {
             if (AssetCache.ContainsKey(address))
             {
                 Addressables.Release(AssetCache[address]);
                 AssetCache.Remove(address);
             }
-
-            yield return null;
         }
 
-        public IEnumerator UnLoadAllAsset(bool unloadAllLoadedObjects = false)
+        public void UnLoadAllAsset(bool unloadAllLoadedObjects = false)
         {
             Addressables.Release(AssetCache);
             AssetCache.Clear();
-            yield return null;
         }
 
         public IEnumerator UnLoadScene(SceneInfo info)
@@ -324,8 +321,12 @@ namespace HT.Framework
             }
 
             var handle = Addressables.UnloadSceneAsync(SceneCache[info.AssetPath]);
-            Addressables.Release(SceneCache[info.AssetPath]);
-            SceneCache.Remove(info.AssetPath);
+            yield return handle;
+            if (handle.IsDone)
+            {
+                Addressables.Release(SceneCache[info.AssetPath]);
+                SceneCache.Remove(info.AssetPath);
+            }
         }
 
         /// <summary>
@@ -336,10 +337,13 @@ namespace HT.Framework
         {
             foreach (var scene in SceneCache)
             {
-                Addressables.UnloadSceneAsync(scene.Value);
+                var handle = Addressables.UnloadSceneAsync(scene.Value);
+                yield return handle;
+                if (handle.IsDone)
+                {
+                    Addressables.Release(scene);
+                }
             }
-
-            Addressables.Release(SceneCache);
             SceneCache.Clear();
             yield return null;
         }
