@@ -53,7 +53,7 @@ namespace HT.Framework
 
         public void OnTerminate()
         {
-            UnLoadAllAsset(true);
+            UnLoadAllAsset();
             ClearMemory();
         }
 
@@ -297,16 +297,20 @@ namespace HT.Framework
             _isLoading = false;
         }
 
-        public void UnLoadAsset(string address, bool unloadAllLoadedObjects = false)
+        public void UnLoadAsset(string address)
         {
             if (AssetCache.ContainsKey(address))
             {
                 Addressables.Release(AssetCache[address]);
                 AssetCache.Remove(address);
             }
+            else
+            {
+                Log.Error("资源未加载：" + address + "如果是AssetReference请传入AssetReferenceName，Addressables则传入地址");
+            }
         }
 
-        public void UnLoadAllAsset(bool unloadAllLoadedObjects = false)
+        public void UnLoadAllAsset()
         {
             Addressables.Release(AssetCache);
             AssetCache.Clear();
@@ -344,6 +348,7 @@ namespace HT.Framework
                     Addressables.Release(scene);
                 }
             }
+
             SceneCache.Clear();
             yield return null;
         }

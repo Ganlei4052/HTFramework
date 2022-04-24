@@ -78,22 +78,20 @@ namespace HT.Framework
         /// <summary>
         /// 卸载资源（异步，Resource模式：卸载未使用的资源，AssetBundle模式：卸载AB包）
         /// </summary>
-        /// <param name="assetBundleName">AB包名称</param>
+        /// <param name="address">AssetPath或者AssetReferenceName</param>
         /// <param name="unloadAllLoadedObjects">是否同时卸载所有实体对象</param>
         /// <returns>卸载协程</returns>
-        public Coroutine UnLoadAsset(string assetBundleName, bool unloadAllLoadedObjects = false)
+        public void UnLoadAsset(string address)
         {
-            return Main.Current.StartCoroutine(_helper.UnLoadAsset(assetBundleName, unloadAllLoadedObjects));
+            _helper.UnLoadAsset(address);
         }
 
         /// <summary>
         /// 卸载所有资源（异步，Resource模式：卸载未使用的资源，AssetBundle模式：卸载AB包）
         /// </summary>
-        /// <param name="unloadAllLoadedObjects">是否同时卸载所有实体对象</param>
-        /// <returns>卸载协程</returns>
-        public Coroutine UnLoadAllAsset(bool unloadAllLoadedObjects = false)
+        public void UnLoadAllAsset()
         {
-            return Main.Current.StartCoroutine(_helper.UnLoadAllAsset(unloadAllLoadedObjects));
+            _helper.UnLoadAllAsset();
         }
 
         /// <summary>
