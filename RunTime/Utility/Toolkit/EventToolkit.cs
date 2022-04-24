@@ -90,15 +90,42 @@ namespace HT.Framework
                 return;
 
             Button button = target.GetComponent<Button>();
+            Toggle toggle = target.GetComponent<Toggle>();
             if (button)
             {
                 button.onClick.RemoveAllListeners();
             }
+            else if (toggle)
+            {
+                toggle.onValueChanged.RemoveAllListeners();
+            }
             else
             {
-                Log.Info(target.name + " 丢失了组件 Button！");
+                Log.Info(target.name + " 丢失了组件 Button 或 Toggle ！");
             }
         }
+        
+        /// <summary>
+        /// UGUI Toggle添加点击事件监听
+        /// </summary>
+        /// <param name="target">事件监听目标</param>
+        /// <param name="callback">回调函数</param>
+        public static void AddEventListener(this RectTransform target, UnityAction<bool> callback)
+        {
+            if (target == null)
+                return;
+
+            Toggle button = target.GetComponent<Toggle>();
+            if (button)
+            {
+                button.onValueChanged.AddListener(callback);
+            }
+            else
+            {
+                Log.Info(target.name + " 丢失了组件 Toggle！");
+            }
+        }
+        
         /// <summary>
         /// 为挂载 MouseRayTargetBase 的目标添加鼠标左键点击事件
         /// </summary>

@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 [assembly: InternalsVisibleTo("HTFramework.AI.Editor")]
 [assembly: InternalsVisibleTo("HTFramework.ILHotfix.Editor")]
@@ -435,9 +436,9 @@ namespace HT.Framework
                 subrect.Set(rect.x + 50, rect.y + 22, rect.width - 50, 16);
                 typeProperty.enumValueIndex = (int)(MainParameter.ParameterType)EditorGUI.EnumPopup(subrect, (MainParameter.ParameterType)typeProperty.enumValueIndex);
 
-                subrect.Set(rect.x, rect.y + 42, 50, 16);
-                GUI.Label(subrect, "Value:");
-                subrect.Set(rect.x + 50, rect.y + 42, rect.width - 50, 16);
+                //subrect.Set(rect.x, rect.y + 42, 50, 16);
+                //GUI.Label(subrect, "Value:");
+                subrect.Set(rect.x, rect.y + 42, rect.width, 16);
                 SerializedProperty valueProperty;
                 switch ((MainParameter.ParameterType)typeProperty.enumValueIndex)
                 {
@@ -488,6 +489,30 @@ namespace HT.Framework
                     case MainParameter.ParameterType.Material:
                         valueProperty = mainParameter.FindPropertyRelative("MaterialValue");
                         valueProperty.objectReferenceValue = EditorGUI.ObjectField(subrect, valueProperty.objectReferenceValue, typeof(Material), false);
+                        break;
+                    case MainParameter.ParameterType.AddressableAsset:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressableAsset");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
+                        break;
+                    case MainParameter.ParameterType.AddressableMaterial:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressableMaterial");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
+                        break;
+                    case MainParameter.ParameterType.AddressablePrefab:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressablePrefab");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
+                        break;
+                    case MainParameter.ParameterType.AddressableTexture:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressableTexture");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
+                        break;
+                    case MainParameter.ParameterType.AddressableAudioClip:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressableAudioClip");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
+                        break;
+                    case MainParameter.ParameterType.AddressableDataSet:
+                        valueProperty = mainParameter.FindPropertyRelative("AddressableDataSet");
+                        EditorGUI.PropertyField(subrect, valueProperty,new GUIContent(" "));
                         break;
                 }
             };

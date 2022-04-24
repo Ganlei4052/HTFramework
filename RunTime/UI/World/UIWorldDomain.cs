@@ -113,7 +113,7 @@ namespace HT.Framework
                 }
                 else
                 {
-                    return Main.m_Resource.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldResidentPanel, null, (obj) =>
+                    return Main.m_Addressable.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldResidentPanel, null, (obj) =>
                     {
                         ui.UIEntity = obj;
                         ui.UIEntity.SetLayerIncludeChildren(_worldUIRoot.gameObject.layer);
@@ -150,7 +150,7 @@ namespace HT.Framework
                 }
                 else
                 {
-                    return Main.m_Resource.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldTemporaryPanel, null, (obj) =>
+                    return Main.m_Addressable.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldTemporaryPanel, null, (obj) =>
                     {
                         ui.UIEntity = obj;
                         ui.UIEntity.SetLayerIncludeChildren(_worldUIRoot.gameObject.layer);
@@ -194,7 +194,7 @@ namespace HT.Framework
                     }
                     else
                     {
-                        return Main.m_Resource.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldResidentPanel, null, (obj) =>
+                        return Main.m_Addressable.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldResidentPanel, null, (obj) =>
                         {
                             ui.UIEntity = obj;
                             ui.UIEntity.SetLayerIncludeChildren(_worldUIRoot.gameObject.layer);
@@ -257,7 +257,7 @@ namespace HT.Framework
                     }
                     else
                     {
-                        return Main.m_Resource.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldTemporaryPanel, null, (obj) =>
+                        return Main.m_Addressable.LoadPrefab(new PrefabInfo(type.GetCustomAttribute<UIResourceAttribute>()), _worldTemporaryPanel, null, (obj) =>
                         {
                             ui.UIEntity = obj;
                             ui.UIEntity.SetLayerIncludeChildren(_worldUIRoot.gameObject.layer);

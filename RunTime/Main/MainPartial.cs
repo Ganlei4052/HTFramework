@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using UObject = UnityEngine.Object;
 
 [assembly: InternalsVisibleTo("Assembly-CSharp-Editor")]
@@ -31,6 +32,7 @@ namespace HT.Framework
         public static Main Current { get; private set; }
 
         #region Static Method
+
         /// <summary>
         /// 克隆实例
         /// </summary>
@@ -41,6 +43,7 @@ namespace HT.Framework
         {
             return Instantiate(original);
         }
+
         /// <summary>
         /// 克隆实例
         /// </summary>
@@ -53,6 +56,7 @@ namespace HT.Framework
         {
             return Instantiate(original, position, rotation);
         }
+
         /// <summary>
         /// 克隆实例
         /// </summary>
@@ -66,6 +70,7 @@ namespace HT.Framework
         {
             return Instantiate(original, position, rotation, parent);
         }
+
         /// <summary>
         /// 克隆实例
         /// </summary>
@@ -77,6 +82,7 @@ namespace HT.Framework
         {
             return Instantiate(original, parent);
         }
+
         /// <summary>
         /// 克隆实例
         /// </summary>
@@ -89,6 +95,7 @@ namespace HT.Framework
         {
             return Instantiate(original, parent, worldPositionStays);
         }
+
         /// <summary>
         /// 克隆 GameObject 实例
         /// </summary>
@@ -115,11 +122,13 @@ namespace HT.Framework
             {
                 obj.transform.localPosition = original.transform.localPosition;
             }
+
             obj.transform.localRotation = original.transform.localRotation;
             obj.transform.localScale = original.transform.localScale;
             obj.SetActive(true);
             return obj;
         }
+
         /// <summary>
         /// 杀死实例
         /// </summary>
@@ -128,6 +137,7 @@ namespace HT.Framework
         {
             Destroy(obj);
         }
+
         /// <summary>
         /// 立即杀死实例
         /// </summary>
@@ -136,6 +146,7 @@ namespace HT.Framework
         {
             DestroyImmediate(obj);
         }
+
         /// <summary>
         /// 杀死一群实例
         /// </summary>
@@ -147,8 +158,10 @@ namespace HT.Framework
             {
                 Destroy(objs[i]);
             }
+
             objs.Clear();
         }
+
         /// <summary>
         /// 杀死一群实例
         /// </summary>
@@ -161,13 +174,14 @@ namespace HT.Framework
                 Destroy(objs[i]);
             }
         }
+
         #endregion
 
         #region Lifecycle
+
         protected override void Awake()
         {
             base.Awake();
-
             if (Current == null)
             {
                 Current = this;
@@ -177,135 +191,173 @@ namespace HT.Framework
                 throw new HTFrameworkException(HTFrameworkModule.Main, "框架致命错误：不能存在两个及以上Main主模块！");
             }
 
-            OnInit();
+            //OnInit();
         }
+
         private void Start()
         {
             OnReady();
         }
+
         private void Update()
         {
             OnUpdate();
         }
+
         private void OnGUI()
         {
             LicenseOnGUI();
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
 
             OnTerminate();
         }
+
         private void OnApplicationFocus(bool focus)
         {
             ApplicationFocusEvent?.Invoke(focus);
         }
+
         private void OnApplicationQuit()
         {
             ApplicationQuitEvent?.Invoke();
         }
+
         #endregion
 
         #region Module
+
         /// <summary>
         /// 切面调试模块
         /// </summary>
         public static AspectTrackManager m_AspectTrack { get; private set; }
+
         /// <summary>
         /// 音频模块
         /// </summary>
         public static AudioManager m_Audio { get; private set; }
+
         /// <summary>
         /// 操作控制模块
         /// </summary>
         public static ControllerManager m_Controller { get; private set; }
+
         /// <summary>
         /// 协程调度模块
         /// </summary>
         public static CoroutinerManager m_Coroutiner { get; private set; }
+
         /// <summary>
         /// 自定义模块
         /// </summary>
         public static CustomModuleManager m_CustomModule { get; private set; }
+
         /// <summary>
         /// 数据集模块
         /// </summary>
         public static DataSetManager m_DataSet { get; private set; }
+
         /// <summary>
         /// 调试模块
         /// </summary>
         public static DebugManager m_Debug { get; private set; }
+
         /// <summary>
         /// ECS模块
         /// </summary>
         public static ECSManager m_ECS { get; private set; }
+
         /// <summary>
         /// 实体模块
         /// </summary>
         public static EntityManager m_Entity { get; private set; }
+
         /// <summary>
         /// 事件模块
         /// </summary>
         public static EventManager m_Event { get; private set; }
+
         /// <summary>
         /// 异常处理模块
         /// </summary>
         public static ExceptionManager m_Exception { get; private set; }
+
         /// <summary>
         /// 有限状态机模块
         /// </summary>
         public static FSMManager m_FSM { get; private set; }
+
         /// <summary>
         /// 热更新模块
         /// </summary>
         public static HotfixManager m_Hotfix { get; private set; }
+
         /// <summary>
         /// 输入模块
         /// </summary>
         public static InputManager m_Input { get; private set; }
+
         /// <summary>
         /// 主模块
         /// </summary>
         public static Main m_Main { get; private set; }
+
         /// <summary>
         /// 网络模块
         /// </summary>
         public static NetworkManager m_Network { get; private set; }
+
         /// <summary>
         /// 对象池模块
         /// </summary>
         public static ObjectPoolManager m_ObjectPool { get; private set; }
+
         /// <summary>
         /// 流程模块
         /// </summary>
         public static ProcedureManager m_Procedure { get; private set; }
+
         /// <summary>
         /// 引用池模块
         /// </summary>
         public static ReferencePoolManager m_ReferencePool { get; private set; }
+
         /// <summary>
         /// 资源模块
         /// </summary>
         public static ResourceManager m_Resource { get; private set; }
+
+        /// <summary>
+        /// 资源模块
+        /// </summary>
+        public static AddressableManager m_Addressable { get; private set; }
+
         /// <summary>
         /// 步骤模块
         /// </summary>
         public static StepMaster m_StepMaster { get; private set; }
+
         /// <summary>
         /// 任务模块
         /// </summary>
         public static TaskMaster m_TaskMaster { get; private set; }
+
         /// <summary>
         /// UI模块
         /// </summary>
         public static UIManager m_UI { get; private set; }
+
         /// <summary>
         /// Web请求模块
         /// </summary>
         public static WebRequestManager m_WebRequest { get; private set; }
 
-        private Dictionary<HTFrameworkModule, IModuleManager> _internalModules = new Dictionary<HTFrameworkModule, IModuleManager>();
+        private Dictionary<HTFrameworkModule, IModuleManager> _internalModules =
+            new Dictionary<HTFrameworkModule, IModuleManager>();
+
         private List<IModuleManager> _internalModulesList = new List<IModuleManager>();
         private bool _isPause = false;
 
@@ -314,10 +366,7 @@ namespace HT.Framework
         /// </summary>
         public bool Pause
         {
-            get
-            {
-                return _isPause;
-            }
+            get { return _isPause; }
             set
             {
                 if (_isPause == value)
@@ -355,12 +404,14 @@ namespace HT.Framework
                     }
                     else
                     {
-                        throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 的 InternalModule 标记与已有模块重复！");
+                        throw new HTFrameworkException(HTFrameworkModule.Main,
+                            "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 的 InternalModule 标记与已有模块重复！");
                     }
                 }
                 else
                 {
-                    throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 丢失了 InternalModule 标记！");
+                    throw new HTFrameworkException(HTFrameworkModule.Main,
+                        "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 丢失了 InternalModule 标记！");
                 }
             }
 
@@ -384,6 +435,7 @@ namespace HT.Framework
             m_Procedure = GetInternalModule(HTFrameworkModule.Procedure) as ProcedureManager;
             m_ReferencePool = GetInternalModule(HTFrameworkModule.ReferencePool) as ReferencePoolManager;
             m_Resource = GetInternalModule(HTFrameworkModule.Resource) as ResourceManager;
+            m_Addressable = GetInternalModule(HTFrameworkModule.Addressable) as AddressableManager;
             m_StepMaster = GetInternalModule(HTFrameworkModule.StepMaster) as StepMaster;
             m_TaskMaster = GetInternalModule(HTFrameworkModule.TaskMaster) as TaskMaster;
             m_UI = GetInternalModule(HTFrameworkModule.UI) as UIManager;
@@ -396,6 +448,7 @@ namespace HT.Framework
                 _internalModulesList[i].OnInit();
             }
         }
+
         private void ModuleReady()
         {
             for (int i = 0; i < _internalModulesList.Count; i++)
@@ -403,6 +456,7 @@ namespace HT.Framework
                 _internalModulesList[i].OnReady();
             }
         }
+
         private void ModuleUpdate()
         {
             if (Pause)
@@ -413,6 +467,7 @@ namespace HT.Framework
                 _internalModulesList[i].OnUpdate();
             }
         }
+
         private void ModuleTerminate()
         {
             for (int i = 0; i < _internalModulesList.Count; i++)
@@ -420,6 +475,7 @@ namespace HT.Framework
                 _internalModulesList[i].OnTerminate();
             }
         }
+
         private void ModulePause()
         {
             for (int i = 0; i < _internalModulesList.Count; i++)
@@ -427,6 +483,7 @@ namespace HT.Framework
                 _internalModulesList[i].OnPause();
             }
         }
+
         private void ModuleResume()
         {
             for (int i = 0; i < _internalModulesList.Count; i++)
@@ -453,16 +510,20 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.Main, "获取内置模块失败：不存在名为 " + moduleName.ToString() + " 的内置模块！");
+                throw new HTFrameworkException(HTFrameworkModule.Main,
+                    "获取内置模块失败：不存在名为 " + moduleName.ToString() + " 的内置模块！");
             }
         }
+
         #endregion
 
         #region License
+
         /// <summary>
         /// 是否永久授权【请勿在代码中修改】
         /// </summary>
         [SerializeField] internal bool IsPermanentLicense = true;
+
         /// <summary>
         /// 当前授权者类名【请勿在代码中修改】
         /// </summary>
@@ -517,6 +578,7 @@ namespace HT.Framework
                 _isLicensePass = false;
             }
         }
+
         private void LicenseReady()
         {
             if (_licenser != null)
@@ -524,6 +586,7 @@ namespace HT.Framework
                 StartCoroutine(LicenseChecking());
             }
         }
+
         private void LicenseOnGUI()
         {
             if (_isLicenseEnd && !_isLicensePass)
@@ -542,6 +605,7 @@ namespace HT.Framework
             _isLicenseEnd = true;
             _isLicensePass = _licenser.IsLicensePass;
         }
+
         private void Paralyze()
         {
             m_Controller.MainCamera.clearFlags = CameraClearFlags.SolidColor;
@@ -551,9 +615,11 @@ namespace HT.Framework
             m_Entity.IsHideAll = true;
             m_Input.IsEnableInputDevice = false;
         }
+
         #endregion
 
         #region DataModel
+
         /// <summary>
         /// 当前环境的所有数据模型【请勿在代码中修改】
         /// </summary>
@@ -585,6 +651,7 @@ namespace HT.Framework
                 }
             }
         }
+
         private void DataModelReady()
         {
             foreach (var dataModel in _dataModels)
@@ -602,6 +669,7 @@ namespace HT.Framework
         {
             return GetDataModel(typeof(T)) as T;
         }
+
         /// <summary>
         /// 获取数据模型
         /// </summary>
@@ -618,6 +686,7 @@ namespace HT.Framework
                 return null;
             }
         }
+
         /// <summary>
         /// 清空指定数据模型的数据绑定
         /// </summary>
@@ -626,6 +695,7 @@ namespace HT.Framework
         {
             ClearDataBinding(typeof(T));
         }
+
         /// <summary>
         /// 清空指定数据模型的数据绑定
         /// </summary>
@@ -637,6 +707,7 @@ namespace HT.Framework
                 AutomaticTask.ClearDataBinding(_dataModels[type]);
             }
         }
+
         /// <summary>
         /// 清空所有数据模型的数据绑定
         /// </summary>
@@ -647,9 +718,11 @@ namespace HT.Framework
                 AutomaticTask.ClearDataBinding(dataModel.Value);
             }
         }
+
         #endregion
 
         #region Parameter
+
         /// <summary>
         /// 主要参数【请勿在代码中修改】
         /// </summary>
@@ -663,9 +736,13 @@ namespace HT.Framework
         /// <returns>是否存在</returns>
         public bool IsExistParameter(string parameterName, MainParameter.ParameterType parameterType)
         {
-            MainParameter mainParameter = MainParameters.Find((p) => { return p.Name == parameterName && p.Type == parameterType; });
+            MainParameter mainParameter = MainParameters.Find((p) =>
+            {
+                return p.Name == parameterName && p.Type == parameterType;
+            });
             return mainParameter != null;
         }
+
         /// <summary>
         /// 是否存在指定名称的参数
         /// </summary>
@@ -676,13 +753,15 @@ namespace HT.Framework
             MainParameter mainParameter = MainParameters.Find((p) => { return p.Name == parameterName; });
             return mainParameter != null;
         }
+
         /// <summary>
         /// 通过名称、类型获取所有参数
         /// </summary>
         /// <param name="parameterName">参数名称</param>
         /// <param name="parameterType">参数类型</param>
         /// <param name="mainParameters">输出的参数列表</param>
-        public void GetParameters(string parameterName, MainParameter.ParameterType parameterType, List<MainParameter> mainParameters)
+        public void GetParameters(string parameterName, MainParameter.ParameterType parameterType,
+            List<MainParameter> mainParameters)
         {
             for (int i = 0; i < MainParameters.Count; i++)
             {
@@ -692,6 +771,7 @@ namespace HT.Framework
                 }
             }
         }
+
         /// <summary>
         /// 通过名称获取所有参数
         /// </summary>
@@ -707,6 +787,7 @@ namespace HT.Framework
                 }
             }
         }
+
         /// <summary>
         /// 通过名称、类型获取参数
         /// </summary>
@@ -715,7 +796,10 @@ namespace HT.Framework
         /// <returns>参数</returns>
         public MainParameter GetParameter(string parameterName, MainParameter.ParameterType parameterType)
         {
-            MainParameter mainParameter = MainParameters.Find((p) => { return p.Name == parameterName && p.Type == parameterType; });
+            MainParameter mainParameter = MainParameters.Find((p) =>
+            {
+                return p.Name == parameterName && p.Type == parameterType;
+            });
             if (mainParameter != null)
             {
                 return mainParameter;
@@ -726,6 +810,7 @@ namespace HT.Framework
                 return null;
             }
         }
+
         /// <summary>
         /// 通过名称获取参数
         /// </summary>
@@ -744,6 +829,7 @@ namespace HT.Framework
                 return null;
             }
         }
+
         /// <summary>
         /// 通过名称获取String参数
         /// </summary>
@@ -754,6 +840,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.String);
             return (mainParameter != null) ? mainParameter.StringValue : "";
         }
+
         /// <summary>
         /// 通过名称获取Integer参数
         /// </summary>
@@ -764,6 +851,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Integer);
             return (mainParameter != null) ? mainParameter.IntegerValue : 0;
         }
+
         /// <summary>
         /// 通过名称获取Float参数
         /// </summary>
@@ -774,6 +862,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Float);
             return (mainParameter != null) ? mainParameter.FloatValue : 0f;
         }
+
         /// <summary>
         /// 通过名称获取Boolean参数
         /// </summary>
@@ -784,6 +873,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Boolean);
             return (mainParameter != null) ? mainParameter.BooleanValue : false;
         }
+
         /// <summary>
         /// 通过名称获取Vector2参数
         /// </summary>
@@ -794,6 +884,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Vector2);
             return (mainParameter != null) ? mainParameter.Vector2Value : Vector2.zero;
         }
+
         /// <summary>
         /// 通过名称获取Vector3参数
         /// </summary>
@@ -804,6 +895,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Vector3);
             return (mainParameter != null) ? mainParameter.Vector3Value : Vector3.zero;
         }
+
         /// <summary>
         /// 通过名称获取Color参数
         /// </summary>
@@ -814,6 +906,7 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Color);
             return (mainParameter != null) ? mainParameter.ColorValue : Color.white;
         }
+
         /// <summary>
         /// 通过名称获取DataSet参数
         /// </summary>
@@ -824,6 +917,22 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.DataSet);
             return (mainParameter != null) ? mainParameter.DataSet : null;
         }
+
+        /// <summary>
+        /// 通过名称获取可寻址DataSet参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetDataSetParameter(string parameterName,HTFAction<DataSetBase> onLoadDone, HTFAction<float> onLoading= null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableDataSet);
+            return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableDataSet, parameterName),
+                onLoading, onLoadDone);
+        }
+        
         /// <summary>
         /// 通过名称获取Prefab参数
         /// </summary>
@@ -834,6 +943,22 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Prefab);
             return (mainParameter != null) ? mainParameter.PrefabValue : null;
         }
+
+        /// <summary>
+        /// 通过名称获取可寻址音效参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetPrefabParameter(string parameterName,HTFAction<GameObject> onLoadDone, HTFAction<float> onLoading = null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressablePrefab);
+            return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressablePrefab, parameterName),
+                onLoading, onLoadDone);
+        }
+        
         /// <summary>
         /// 通过名称获取Texture参数
         /// </summary>
@@ -844,6 +969,22 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Texture);
             return (mainParameter != null) ? mainParameter.TextureValue : null;
         }
+
+        /// <summary>
+        /// 通过名称获取可寻址Texture参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetTextureParameter(string parameterName,HTFAction<Texture> onLoadDone, HTFAction<float> onLoading = null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableTexture);
+            return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableTexture, parameterName),
+                onLoading, onLoadDone);
+        }
+        
         /// <summary>
         /// 通过名称获取AudioClip参数
         /// </summary>
@@ -854,6 +995,22 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AudioClip);
             return (mainParameter != null) ? mainParameter.AudioClipValue : null;
         }
+
+        /// <summary>
+        /// 通过名称获取可寻址AudioClip参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetAudioClipParameter(string parameterName,HTFAction<AudioClip> onLoadDone, HTFAction<float> onLoading = null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableAudioClip);
+            return m_Addressable.LoadAddress<AudioClip>(new AssetReferenceInfo(mainParameter.AddressableAudioClip, parameterName),
+                onLoading, onLoadDone);
+        }
+        
         /// <summary>
         /// 通过名称获取Material参数
         /// </summary>
@@ -864,6 +1021,38 @@ namespace HT.Framework
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.Material);
             return (mainParameter != null) ? mainParameter.MaterialValue : null;
         }
+
+        /// <summary>
+        /// 通过名称获取可寻址Material参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetMaterialParameter(string parameterName,HTFAction<Material> onLoadDone, HTFAction<float> onLoading = null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableMaterial);
+            return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableMaterial, parameterName),
+                onLoading, onLoadDone);
+        }
+        
+        /// <summary>
+        /// 通过名称获取可寻址资源参数
+        /// </summary>
+        /// <param name="parameterName"> 参数名称 </param>
+        /// <param name="onLoading"> 加载过程回调 </param>
+        /// <param name="onLoadDone"> 加载完成回调 </param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public Coroutine GetAddressableAssetParameter<T>(string parameterName,HTFAction<T> onLoadDone, HTFAction<float> onLoading = null)
+            where T : UObject
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableAsset);
+            return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableAsset, parameterName),
+                onLoading, onLoadDone);
+        }
+
         /// <summary>
         /// 通过名称设置String参数
         /// </summary>
@@ -877,6 +1066,7 @@ namespace HT.Framework
                 mainParameter.StringValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Integer参数
         /// </summary>
@@ -890,6 +1080,7 @@ namespace HT.Framework
                 mainParameter.IntegerValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Float参数
         /// </summary>
@@ -903,6 +1094,7 @@ namespace HT.Framework
                 mainParameter.FloatValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Boolean参数
         /// </summary>
@@ -916,6 +1108,7 @@ namespace HT.Framework
                 mainParameter.BooleanValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Vector2参数
         /// </summary>
@@ -929,6 +1122,7 @@ namespace HT.Framework
                 mainParameter.Vector2Value = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Vector3参数
         /// </summary>
@@ -942,6 +1136,7 @@ namespace HT.Framework
                 mainParameter.Vector3Value = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Color参数
         /// </summary>
@@ -955,6 +1150,7 @@ namespace HT.Framework
                 mainParameter.ColorValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置DataSet参数
         /// </summary>
@@ -968,6 +1164,7 @@ namespace HT.Framework
                 mainParameter.DataSet = dataset;
             }
         }
+
         /// <summary>
         /// 通过名称设置Prefab参数
         /// </summary>
@@ -981,6 +1178,7 @@ namespace HT.Framework
                 mainParameter.PrefabValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Texture参数
         /// </summary>
@@ -994,6 +1192,7 @@ namespace HT.Framework
                 mainParameter.TextureValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置AudioClip参数
         /// </summary>
@@ -1007,6 +1206,7 @@ namespace HT.Framework
                 mainParameter.AudioClipValue = value;
             }
         }
+
         /// <summary>
         /// 通过名称设置Material参数
         /// </summary>
@@ -1020,28 +1220,35 @@ namespace HT.Framework
                 mainParameter.MaterialValue = value;
             }
         }
+
         #endregion
 
         #region Setting
+
         /// <summary>
         /// 是否启用常规日志打印
         /// </summary>
         public bool IsEnabledLogInfo = true;
+
         /// <summary>
         /// 是否启用警告日志打印
         /// </summary>
         public bool IsEnabledLogWarning = true;
+
         /// <summary>
         /// 是否启用错误日志打印
         /// </summary>
         public bool IsEnabledLogError = true;
+
         /// <summary>
         /// 是否允许将场景添加到发布界面
         /// </summary>
         public bool IsAllowSceneAddBuild = false;
+
         #endregion
 
         #region Utility
+
         private List<HTFAction> _actionQueue = new List<HTFAction>();
         private List<HTFAction> _actionExecuteQueue = new List<HTFAction>();
         private bool _isCanDoQueue = false;
@@ -1054,10 +1261,12 @@ namespace HT.Framework
                 _actionExecuteQueue.AddRange(_actionQueue);
                 _actionQueue.Clear();
             }
+
             for (int i = 0; i < _actionExecuteQueue.Count; i++)
             {
                 _actionExecuteQueue[i]();
             }
+
             _actionExecuteQueue.Clear();
         }
 
@@ -1071,6 +1280,7 @@ namespace HT.Framework
             _actionQueue.Add(action);
             _isCanDoQueue = true;
         }
+
         /// <summary>
         /// 将执行委托排到子线程调用（在主线程中）
         /// </summary>
@@ -1087,7 +1297,8 @@ namespace HT.Framework
                 }
                 catch (Exception e)
                 {
-                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName, action.Method.Name, e.Message);
+                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName,
+                        action.Method.Name, e.Message);
                     Log.Error(error);
                 }
                 finally
@@ -1100,6 +1311,7 @@ namespace HT.Framework
             };
             return ThreadPool.QueueUserWorkItem(callback);
         }
+
         /// <summary>
         /// 将执行委托排到子线程调用（在主线程中）
         /// </summary>
@@ -1117,7 +1329,8 @@ namespace HT.Framework
                 }
                 catch (Exception e)
                 {
-                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName, action.Method.Name, e.Message);
+                    string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName,
+                        action.Method.Name, e.Message);
                     Log.Error(error);
                 }
                 finally
@@ -1130,20 +1343,25 @@ namespace HT.Framework
             };
             return ThreadPool.QueueUserWorkItem(callback, state);
         }
+
         #endregion
 
         #region ApplicationFocus
+
         /// <summary>
         /// 程序焦点事件
         /// </summary>
         public event HTFAction<bool> ApplicationFocusEvent;
+
         #endregion
 
         #region ApplicationQuit
+
         /// <summary>
         /// 程序退出事件
         /// </summary>
         public event HTFAction ApplicationQuitEvent;
+
         #endregion
     }
 
@@ -1154,6 +1372,7 @@ namespace HT.Framework
     {
         AspectTrack,
         Audio,
+        WXAudio,
         Controller,
         Coroutiner,
         CustomModule,
@@ -1172,6 +1391,7 @@ namespace HT.Framework
         Procedure,
         ReferencePool,
         Resource,
+        Addressable,
         StepMaster,
         TaskMaster,
         UI,
@@ -1180,14 +1400,24 @@ namespace HT.Framework
     }
 
     public delegate void HTFAction();
+
     public delegate void HTFAction<in T>(T arg);
+
     public delegate void HTFAction<in T1, in T2>(T1 arg1, T2 arg2);
+
     public delegate void HTFAction<in T1, in T2, in T3>(T1 arg1, T2 arg2, T3 arg3);
+
     public delegate TResult HTFFunc<out TResult>();
+
     public delegate TResult HTFFunc<in T, out TResult>(T arg);
+
     public delegate TResult HTFFunc<in T1, in T2, out TResult>(T1 arg1, T2 arg2);
+
     public delegate TResult HTFFunc<in T1, in T2, in T3, out TResult>(T1 arg1, T2 arg2, T3 arg3);
+
     public delegate IEnumerator CoroutineAction();
+
     public delegate IEnumerator CoroutineAction<in T>(T arg);
+
     public delegate IEnumerator CoroutineAction<in T1, in T2>(T1 arg1, T2 arg2);
 }

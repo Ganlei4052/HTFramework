@@ -39,6 +39,10 @@ namespace HT.Framework
             {
                 PropertyField(nameof(ResourceManager.AssetBundleManifestName), "Manifest Name");
                 PropertyField(nameof(ResourceManager.IsEditorMode), "Editor Mode");
+                if (!Target.IsEditorMode)
+                {
+                    PropertyField(nameof(ResourceManager.IsAppendHash), "Is AppendHash");
+                }
             }
 
             GUI.enabled = true;

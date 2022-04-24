@@ -1,5 +1,7 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.Serialization;
 
 namespace HT.Framework
 {
@@ -18,12 +20,19 @@ namespace HT.Framework
         public Vector2 Vector2Value = Vector2.zero;
         public Vector3 Vector3Value = Vector3.zero;
         public Color ColorValue = Color.white;
+        public AssetReference AddressableDataSet = null;
+        public AssetReference AddressablePrefab = null;
+        public AssetReference AddressableTexture = null;
+        public AssetReference AddressableAudioClip = null;
+        public AssetReference AddressableMaterial = null;
+        public AssetReference AddressableAsset = null;
+        
         public DataSetBase DataSet = null;
         public GameObject PrefabValue = null;
         public Texture TextureValue = null;
         public AudioClip AudioClipValue = null;
         public Material MaterialValue = null;
-
+        
         /// <summary>
         /// 参数类型
         /// </summary>
@@ -76,7 +85,32 @@ namespace HT.Framework
             /// <summary>
             /// 材质
             /// </summary>
-            Material
+            Material,
+            /// <summary>
+            /// 可寻址资源
+            /// </summary>
+            AddressableAsset,
+            /// <summary>
+            /// 可寻址音效
+            /// </summary>
+            AddressableAudioClip,
+            /// <summary>
+            /// 可寻址DataSet
+            /// </summary>
+            AddressableDataSet,
+            /// <summary>
+            /// 可寻址预设
+            /// </summary>
+            AddressablePrefab,
+            /// <summary>
+            /// 可寻址图片
+            /// </summary>
+            AddressableTexture,
+            /// <summary>
+            /// 可寻址材质
+            /// </summary>
+            AddressableMaterial
+            
         }
     }
 }

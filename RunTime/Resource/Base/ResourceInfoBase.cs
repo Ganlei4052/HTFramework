@@ -1,4 +1,6 @@
-﻿namespace HT.Framework
+﻿using UnityEngine.AddressableAssets;
+
+namespace HT.Framework
 {
     /// <summary>
     /// 资源信息基类
@@ -18,6 +20,9 @@
         /// </summary>
         public string ResourcePath;
 
+        public string AssetReferenceName;
+        
+        public AssetReference AssetReferenceValue;
         public ResourceInfoBase(string assetBundleName, string assetPath, string resourcePath)
         {
             AssetBundleName = string.IsNullOrEmpty(assetBundleName) ? assetBundleName : assetBundleName.ToLower();
@@ -25,6 +30,11 @@
             ResourcePath = resourcePath;
         }
 
+        public ResourceInfoBase(AssetReference assetReference,string assetReferenceName)
+        {
+            AssetReferenceName = assetReferenceName;
+            AssetReferenceValue = assetReference;
+        }
         /// <summary>
         /// 获取资源的Resource全路径
         /// </summary>

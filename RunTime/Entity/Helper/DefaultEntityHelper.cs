@@ -193,7 +193,7 @@ namespace HT.Framework
                         }
                         else
                         {
-                            return Main.m_Resource.LoadPrefab(new PrefabInfo(attribute), _entitiesGroup[type].transform, onLoading, (obj) =>
+                            return Main.m_Addressable.LoadPrefab(new PrefabInfo(attribute), _entitiesGroup[type].transform, onLoading, (obj) =>
                             {
                                 EntityLogicBase entityLogic = GenerateEntity(type, obj, entityName == "<None>" ? type.Name : entityName);
 
