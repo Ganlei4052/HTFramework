@@ -124,7 +124,7 @@ namespace HT.Framework
         /// <param name="loadMode">加载模式</param>
         /// <param name="isEditorMode">是否是编辑器模式</param>
         /// <param name="manifestName">AB包清单名称</param>
-        public void SetLoader(ResourceLoadMode loadMode, bool isEditorMode, string manifestName,bool isAppendHash)
+        public void SetLoader(ResourceLoadMode loadMode, bool isEditorMode, string manifestName, bool isAppendHash)
         {
             LoadMode = loadMode;
             IsEditorMode = isEditorMode;
@@ -390,7 +390,7 @@ namespace HT.Framework
                     Scene scene = SceneManager.GetSceneByPath(info.AssetPath);
                     Scenes.Add(info.ResourcePath, scene);
                     yield return LoadAssetBundleAsync(info.AssetBundleName, onLoading);
-                    
+
                     AsyncOperation ao = SceneManager.LoadSceneAsync(info.ResourcePath, LoadSceneMode.Additive);
                     while (!ao.isDone)
                     {
@@ -655,7 +655,7 @@ namespace HT.Framework
                         GetAssetBundleHash(assetBundleName)))
                 {
                     yield return request.SendWebRequest();
-                    if (!request.isNetworkError && !request.isHttpError)
+                    if (!request.isNetworkError && request.isHttpError)
                     {
                         AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                         if (bundle)
@@ -703,7 +703,7 @@ namespace HT.Framework
                         yield return null;
                     }
 
-                    if (!request.isNetworkError && !request.isHttpError)
+                    if (!request.isNetworkError && request.isHttpError)
                     {
                         AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(request);
                         if (bundle)

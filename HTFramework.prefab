@@ -2265,7 +2265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8094507786935335644}
-  - component: {fileID: 1332443916713722548}
+  - component: {fileID: 2548211200830428132}
   m_Layer: 0
   m_Name: WXAudio
   m_TagString: Untagged
@@ -2287,7 +2287,7 @@ Transform:
   m_Father: {fileID: 4532264058016742}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1332443916713722548
+--- !u!114 &2548211200830428132
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2296,10 +2296,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 9162065620442743168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc0378186f947e4daddfeaa4d9f0d20, type: 3}
+  m_Script: {fileID: 11500000, guid: 374ea2601c3bd0b4a9c97648782749b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HelperType: <None>
+  HelperType: HT.Framework.DefaultWXAudioHelper
   MuteDefault: 0
   BackgroundPriorityDefault: 0
   SinglePriorityDefault: 10

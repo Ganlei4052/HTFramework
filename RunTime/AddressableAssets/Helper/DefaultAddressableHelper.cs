@@ -203,15 +203,30 @@ namespace HT.Framework
 
             Object asset = null;
             AsyncOperationHandle handle;
-
-            if (AssetCache.ContainsKey(info.AssetReferenceName))
+            bool isAssetReference = info.IsAssetReference;
+            if (!isAssetReference)
             {
-                handle = AssetCache[info.AssetReferenceName];
+                if (AssetCache.ContainsKey(info.AssetPath))
+                {
+                    handle = AssetCache[info.AssetPath];
+                }
+                else
+                {
+                    handle = Addressables.LoadAssetAsync<T>(info.AssetPath);
+                }
             }
             else
             {
-                handle = Addressables.LoadAssetAsync<T>(info.AssetReferenceValue);
+                if (AssetCache.ContainsKey(info.AssetReferenceName))
+                {
+                    handle = AssetCache[info.AssetReferenceName];
+                }
+                else
+                {
+                    handle = Addressables.LoadAssetAsync<T>(info.AssetReferenceValue);
+                }
             }
+
 
             if (handle.Status == AsyncOperationStatus.Failed)
             {
@@ -231,14 +246,30 @@ namespace HT.Framework
                 asset = handle.Result as Object;
                 if (asset != null)
                 {
-                    AssetCache.Add(info.AssetReferenceName, handle);
+                    if (!isAssetReference)
+                    {
+                        AssetCache.Add(info.AssetPath, handle);
+                    }
+                    else
+                    {
+                        AssetCache.Add(info.AssetReferenceName, handle);
+                    }
                     onLoadDone?.Invoke(asset as T);
                 }
                 else
                 {
                     onLoadDone?.Invoke(null);
-                    throw new HTFrameworkException(HTFrameworkModule.Resource,
-                        "请求：" + info.AssetPath + " 未下载到AB包！");
+                    if (!isAssetReference)
+                    {
+                        throw new HTFrameworkException(HTFrameworkModule.Resource,
+                            "请求：" + info.AssetPath + " 未下载到AB包！");
+                    }
+                    else
+                    {
+                        throw new HTFrameworkException(HTFrameworkModule.Resource,
+                            "请求：" + info.AssetReferenceName + " 未下载到AB包！");
+                    }
+                    
                 }
             }
 
@@ -312,7 +343,11 @@ namespace HT.Framework
 
         public void UnLoadAllAsset()
         {
-            Addressables.Release(AssetCache);
+            foreach (var asyncOperationHandle in AssetCache)
+            {
+                Addressables.Release(asyncOperationHandle.Value);
+            }
+
             AssetCache.Clear();
         }
 
@@ -345,10 +380,9 @@ namespace HT.Framework
                 yield return handle;
                 if (handle.IsDone)
                 {
-                    Addressables.Release(scene);
+                    Addressables.Release(scene.Value);
                 }
             }
-
             SceneCache.Clear();
             yield return null;
         }

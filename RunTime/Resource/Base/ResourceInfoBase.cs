@@ -23,17 +23,21 @@ namespace HT.Framework
         public string AssetReferenceName;
         
         public AssetReference AssetReferenceValue;
-        public ResourceInfoBase(string assetBundleName, string assetPath, string resourcePath)
+
+        public bool IsAssetReference = false;
+        public ResourceInfoBase(string assetBundleName, string assetPath, string resourcePath,bool isAssetReference = false)
         {
             AssetBundleName = string.IsNullOrEmpty(assetBundleName) ? assetBundleName : assetBundleName.ToLower();
             AssetPath = assetPath;
             ResourcePath = resourcePath;
+            IsAssetReference = isAssetReference;
         }
 
-        public ResourceInfoBase(AssetReference assetReference,string assetReferenceName)
+        public ResourceInfoBase(AssetReference assetReference,string assetReferenceName, bool isAssetReference = true)
         {
             AssetReferenceName = assetReferenceName;
             AssetReferenceValue = assetReference;
+            IsAssetReference = isAssetReference;
         }
         /// <summary>
         /// 获取资源的Resource全路径

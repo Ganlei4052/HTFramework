@@ -241,6 +241,11 @@ namespace HT.Framework
         public static AudioManager m_Audio { get; private set; }
 
         /// <summary>
+        /// 音频模块
+        /// </summary>
+        public static WXAudioManager m_WXAudio { get; private set; }
+
+        /// <summary>
         /// 操作控制模块
         /// </summary>
         public static ControllerManager m_Controller { get; private set; }
@@ -417,6 +422,7 @@ namespace HT.Framework
 
             m_AspectTrack = GetInternalModule(HTFrameworkModule.AspectTrack) as AspectTrackManager;
             m_Audio = GetInternalModule(HTFrameworkModule.Audio) as AudioManager;
+            m_WXAudio = GetInternalModule(HTFrameworkModule.WXAudio) as WXAudioManager;
             m_Controller = GetInternalModule(HTFrameworkModule.Controller) as ControllerManager;
             m_Coroutiner = GetInternalModule(HTFrameworkModule.Coroutiner) as CoroutinerManager;
             m_CustomModule = GetInternalModule(HTFrameworkModule.CustomModule) as CustomModuleManager;
@@ -926,13 +932,14 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetDataSetParameter(string parameterName,HTFAction<DataSetBase> onLoadDone, HTFAction<float> onLoading= null)
+        public Coroutine GetDataSetParameter(string parameterName, HTFAction<DataSetBase> onLoadDone,
+            HTFAction<float> onLoading = null)
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableDataSet);
             return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableDataSet, parameterName),
                 onLoading, onLoadDone);
         }
-        
+
         /// <summary>
         /// 通过名称获取Prefab参数
         /// </summary>
@@ -952,13 +959,14 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetPrefabParameter(string parameterName,HTFAction<GameObject> onLoadDone, HTFAction<float> onLoading = null)
+        public Coroutine GetPrefabParameter(string parameterName, HTFAction<GameObject> onLoadDone,
+            HTFAction<float> onLoading = null)
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressablePrefab);
             return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressablePrefab, parameterName),
                 onLoading, onLoadDone);
         }
-        
+
         /// <summary>
         /// 通过名称获取Texture参数
         /// </summary>
@@ -978,13 +986,14 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetTextureParameter(string parameterName,HTFAction<Texture> onLoadDone, HTFAction<float> onLoading = null)
+        public Coroutine GetTextureParameter(string parameterName, HTFAction<Texture> onLoadDone,
+            HTFAction<float> onLoading = null)
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableTexture);
             return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableTexture, parameterName),
                 onLoading, onLoadDone);
         }
-        
+
         /// <summary>
         /// 通过名称获取AudioClip参数
         /// </summary>
@@ -1004,13 +1013,24 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetAudioClipParameter(string parameterName,HTFAction<AudioClip> onLoadDone, HTFAction<float> onLoading = null)
+        public Coroutine GetAudioClipParameterFromAssetReference(string parameterName, HTFAction<AudioClip> onLoadDone,
+            HTFAction<float> onLoading = null)
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableAudioClip);
-            return m_Addressable.LoadAddress<AudioClip>(new AssetReferenceInfo(mainParameter.AddressableAudioClip, parameterName),
+            return m_Addressable.LoadAddress<AudioClip>(
+                new AssetReferenceInfo(mainParameter.AddressableAudioClip, parameterName),
                 onLoading, onLoadDone);
         }
-        
+
+        public Coroutine GetAudioClipParameterFromAddress(string parameterName, HTFAction<AudioClip> onLoadDone,
+            HTFAction<float> onLoading = null)
+        {
+            MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.String);
+            return m_Addressable.LoadAddress<AudioClip>(
+                new AssetReferenceInfo("", "Assets/" + mainParameter.StringValue, ""),
+                onLoading, onLoadDone);
+        }
+
         /// <summary>
         /// 通过名称获取Material参数
         /// </summary>
@@ -1030,13 +1050,14 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetMaterialParameter(string parameterName,HTFAction<Material> onLoadDone, HTFAction<float> onLoading = null)
+        public Coroutine GetMaterialParameter(string parameterName, HTFAction<Material> onLoadDone,
+            HTFAction<float> onLoading = null)
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableMaterial);
             return m_Addressable.LoadAddress(new AssetReferenceInfo(mainParameter.AddressableMaterial, parameterName),
                 onLoading, onLoadDone);
         }
-        
+
         /// <summary>
         /// 通过名称获取可寻址资源参数
         /// </summary>
@@ -1045,7 +1066,8 @@ namespace HT.Framework
         /// <param name="onLoadDone"> 加载完成回调 </param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Coroutine GetAddressableAssetParameter<T>(string parameterName,HTFAction<T> onLoadDone, HTFAction<float> onLoading = null)
+        public Coroutine GetAddressableAssetParameter<T>(string parameterName, HTFAction<T> onLoadDone,
+            HTFAction<float> onLoading = null)
             where T : UObject
         {
             MainParameter mainParameter = GetParameter(parameterName, MainParameter.ParameterType.AddressableAsset);
