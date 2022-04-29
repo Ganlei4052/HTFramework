@@ -383,6 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4532264058016742}
   - component: {fileID: 114872231495406314}
+  - component: {fileID: 6722029511088159992}
   m_Layer: 0
   m_Name: HTFramework
   m_TagString: Untagged
@@ -450,6 +451,18 @@ MonoBehaviour:
   IsEnabledLogWarning: 1
   IsEnabledLogError: 1
   IsAllowSceneAddBuild: 0
+--- !u!114 &6722029511088159992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1679441640883288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f24b5111793b38649bc08f7639d26424, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1704541190228656
 GameObject:
   m_ObjectHideFlags: 0
@@ -2173,7 +2186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181871179f4544d6a7b9d9dab35a564f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HelperType: <None>
+  HelperType: HT.Framework.DefaultAddressableHelper
 --- !u!1 &8939765184236815034
 GameObject:
   m_ObjectHideFlags: 0
@@ -2301,13 +2314,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HelperType: HT.Framework.DefaultWXAudioHelper
   MuteDefault: 0
-  BackgroundPriorityDefault: 0
-  SinglePriorityDefault: 10
-  MultiplePriorityDefault: 20
-  WorldPriorityDefault: 30
-  OneShootPriorityDefault: 40
   BackgroundVolumeDefault: 0.6
-  SingleVolumeDefault: 1
-  MultipleVolumeDefault: 1
-  WorldVolumeDefault: 1
-  OneShootVolumeDefault: 1
+  VolumeDefault: 1

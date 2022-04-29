@@ -165,10 +165,45 @@ namespace HT.Framework
             });
             for (int i = 0; i < types.Count; i++)
             {
-                UIResourceAttribute attribute = types[i].GetCustomAttribute<UIResourceAttribute>();
+                UIResourceAttribute rAttribute = types[i].GetCustomAttribute<UIResourceAttribute>();
+                UIAddressableAttribute attribute = types[i].GetCustomAttribute<UIAddressableAttribute>();
                 if (attribute != null)
                 {
                     switch (attribute.EntityType)
+                    {
+                        case UIType.Overlay:
+                            if (_module.IsEnableOverlayUI)
+                            {
+                                OverlayUIs.Add(types[i], Activator.CreateInstance(types[i]) as UILogicBase);
+                            }
+                
+                            break;
+                        case UIType.Camera:
+                            if (_module.IsEnableCameraUI)
+                            {
+                                CameraUIs.Add(types[i], Activator.CreateInstance(types[i]) as UILogicBase);
+                            }
+                
+                            break;
+                        case UIType.World:
+                            if (_module.IsEnableWorldUI)
+                            {
+                                if (!WorldUIs.ContainsKey(attribute.WorldUIDomainName))
+                                {
+                                    WorldUIs.Add(attribute.WorldUIDomainName,
+                                        new UIWorldDomain(attribute.WorldUIDomainName,
+                                            _worldUIRoot.FindChildren("CanvasTem")));
+                                }
+                
+                                WorldUIs[attribute.WorldUIDomainName].Injection(types[i]);
+                            }
+                
+                            break;
+                    }
+                }
+                else if (rAttribute != null)
+                {
+                    switch (rAttribute.EntityType)
                     {
                         case UIType.Overlay:
                             if (_module.IsEnableOverlayUI)
@@ -185,18 +220,18 @@ namespace HT.Framework
                         case UIType.World:
                             if (_module.IsEnableWorldUI)
                             {
-                                if (!WorldUIs.ContainsKey(attribute.WorldUIDomainName))
+                                if (!WorldUIs.ContainsKey(rAttribute.WorldUIDomainName))
                                 {
-                                    WorldUIs.Add(attribute.WorldUIDomainName, new UIWorldDomain(attribute.WorldUIDomainName, _worldUIRoot.FindChildren("CanvasTem")));
+                                    WorldUIs.Add(rAttribute.WorldUIDomainName, new UIWorldDomain(rAttribute.WorldUIDomainName, _worldUIRoot.FindChildren("CanvasTem")));
                                 }
-                                WorldUIs[attribute.WorldUIDomainName].Injection(types[i]);
+                                WorldUIs[rAttribute.WorldUIDomainName].Injection(types[i]);
                             }
                             break;
                     }
                 }
                 else
                 {
-                    throw new HTFrameworkException(HTFrameworkModule.UI, "创建UI逻辑对象失败：UI逻辑类 " + types[i].Name + " 丢失 UIResourceAttribute 标记！");
+                    throw new HTFrameworkException(HTFrameworkModule.UI, "创建UI逻辑对象失败：UI逻辑类 " + types[i].Name + " 丢失 UIAttribute 标记！");
                 }
             }
         }

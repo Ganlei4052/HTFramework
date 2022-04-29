@@ -446,7 +446,7 @@ namespace HT.Framework
             m_TaskMaster = GetInternalModule(HTFrameworkModule.TaskMaster) as TaskMaster;
             m_UI = GetInternalModule(HTFrameworkModule.UI) as UIManager;
             m_WebRequest = GetInternalModule(HTFrameworkModule.WebRequest) as WebRequestManager;
-
+            
             _internalModulesList.Sort((a, b) => { return a.Priority.CompareTo(b.Priority); });
 
             for (int i = 0; i < _internalModulesList.Count; i++)

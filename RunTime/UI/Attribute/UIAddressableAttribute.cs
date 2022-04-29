@@ -14,7 +14,7 @@ namespace HT.Framework
         public string AssetBundleName { get; private set; }
         public string ResourcePath { get; private set; }
 
-        public UIAddressableAttribute(string assetBundleName, string assetPath, string resourcePath, UIType entityType = UIType.Overlay, string worldUIDomainName = "World")
+        public UIAddressableAttribute(string assetPath,UIType entityType = UIType.Overlay, string worldUIDomainName = "World")
         {
             AssetPath = assetPath;
             EntityType = entityType;

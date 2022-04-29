@@ -13,15 +13,17 @@ namespace HT.Framework
         /// 是否静音初始值【请勿在代码中修改】
         /// </summary>
         [SerializeField] internal bool MuteDefault = false;
+        
         /// <summary>
         /// 背景音乐音量初始值【请勿在代码中修改】
         /// </summary>
         [SerializeField] internal float BackgroundVolumeDefault = 0.6f;
+        
         /// <summary>
         /// 音效音量初始值【请勿在代码中修改】
         /// </summary>
         [SerializeField] internal float VolumeDefault = 1;
-
+        
         /// <summary>
         /// 静音
         /// </summary>
@@ -36,6 +38,7 @@ namespace HT.Framework
                 _helper.Mute = value;
             }
         }
+        
         /// <summary>
         /// 背景音乐是否播放中
         /// </summary>
@@ -46,6 +49,7 @@ namespace HT.Framework
                 return _helper.IsBackgroundPlaying;
             }
         }
+        
         /// <summary>
         /// 音效是否播放中
         /// </summary>
@@ -56,6 +60,7 @@ namespace HT.Framework
                 return _helper.IsSoundPlaying;
             }
         }
+        
         /// <summary>
         /// 背景音乐音量
         /// </summary>
@@ -70,6 +75,7 @@ namespace HT.Framework
                 _helper.BackgroundVolume = value;
             }
         }
+        
         /// <summary>
         /// 音效音量
         /// </summary>
@@ -93,7 +99,7 @@ namespace HT.Framework
             BackgroundVolume = BackgroundVolumeDefault;
             Volume = VolumeDefault;
         }
-
+        
         /// <summary>
         /// 播放背景音乐
         /// </summary>
@@ -105,6 +111,7 @@ namespace HT.Framework
         {
             _helper.PlayBackgroundMusic(clipPath, isLoop, speed,startTime);
         }
+        
         /// <summary>
         /// 暂停播放背景音乐
         /// </summary>
@@ -112,6 +119,7 @@ namespace HT.Framework
         {
             _helper.PauseBackgroundMusic();
         }
+        
         /// <summary>
         /// 恢复播放背景音乐
         /// </summary>
@@ -119,6 +127,7 @@ namespace HT.Framework
         {
             _helper.ResumeBackgroundMusic();
         }
+        
         /// <summary>
         /// 停止播放背景音乐
         /// </summary>
@@ -126,7 +135,7 @@ namespace HT.Framework
         {
             _helper.StopBackgroundMusic();
         }
-
+        
         /// <summary>
         /// 播放音效
         /// </summary>
@@ -137,13 +146,13 @@ namespace HT.Framework
         {
             _helper.PlaySound(clipPath, isLoop, speed);
         }
+        
         /// <summary>
         /// 停止播放音效
         /// </summary>
-        /// <param name="clipPath">音乐文件在Assets下的路径如 Source/Sounds/ShootingSound/card.wav</param>
-        public void StopSound(string clipPath)
+        public void StopSound()
         {
-            _helper.StopSound(clipPath);
+            _helper.StopSound();
         }
     }
 }

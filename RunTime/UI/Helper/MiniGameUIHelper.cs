@@ -170,7 +170,7 @@ namespace HT.Framework
             for (int i = 0; i < types.Count; i++)
             {
                 UIAddressableAttribute attribute = types[i].GetCustomAttribute<UIAddressableAttribute>();
-                UIResourceAttribute rattribute = types[i].GetCustomAttribute<UIResourceAttribute>();
+                UIResourceAttribute rAttribute = types[i].GetCustomAttribute<UIResourceAttribute>();
                 if (attribute != null)
                 {
                     switch (attribute.EntityType)
@@ -205,9 +205,9 @@ namespace HT.Framework
                             break;
                     }
                 }
-                else if (rattribute != null)
+                else if (rAttribute != null)
                 {
-                    switch (rattribute.EntityType)
+                    switch (rAttribute.EntityType)
                     {
                         case UIType.Overlay:
                             if (_module.IsEnableOverlayUI)
@@ -226,14 +226,14 @@ namespace HT.Framework
                         case UIType.World:
                             if (_module.IsEnableWorldUI)
                             {
-                                if (!WorldUIs.ContainsKey(rattribute.WorldUIDomainName))
+                                if (!WorldUIs.ContainsKey(rAttribute.WorldUIDomainName))
                                 {
-                                    WorldUIs.Add(rattribute.WorldUIDomainName,
-                                        new UIWorldDomain(rattribute.WorldUIDomainName,
+                                    WorldUIs.Add(rAttribute.WorldUIDomainName,
+                                        new UIWorldDomain(rAttribute.WorldUIDomainName,
                                             _worldUIRoot.FindChildren("CanvasTem")));
                                 }
 
-                                WorldUIs[rattribute.WorldUIDomainName].Injection(types[i]);
+                                WorldUIs[rAttribute.WorldUIDomainName].Injection(types[i]);
                             }
 
                             break;
