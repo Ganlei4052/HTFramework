@@ -17,7 +17,6 @@
         /// 是否运行中
         /// </summary>
         public virtual bool IsRunning { get; set; }
-
         /// <summary>
         /// 初始化模块
         /// </summary>

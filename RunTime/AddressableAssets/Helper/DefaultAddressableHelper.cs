@@ -248,11 +248,17 @@ namespace HT.Framework
                 {
                     if (!isAssetReference)
                     {
-                        AssetCache.Add(info.AssetPath, handle);
+                        if (!AssetCache.ContainsKey(info.AssetPath))
+                        {
+                            AssetCache.Add(info.AssetPath, handle);
+                        }
                     }
                     else
                     {
-                        AssetCache.Add(info.AssetReferenceName, handle);
+                        if (!AssetCache.ContainsKey(info.AssetReferenceName))
+                        {
+                            AssetCache.Add(info.AssetReferenceName, handle);
+                        }
                     }
                     onLoadDone?.Invoke(asset as T);
                 }

@@ -22,9 +22,9 @@ namespace HT.Framework
         private WXInnerAudioContext _backgroundAudioContext = null;
         
         /// <summary>
-        /// 背景音乐播放器
+        /// 音效播放器
         /// </summary>
-        private WXInnerAudioContext _backSoundAudioContext = null;
+        private WXInnerAudioContext _SoundAudioContext = null;
         
         /// <summary>
         /// 音频管理器
@@ -77,10 +77,10 @@ namespace HT.Framework
         {
             get 
             {
-                if (_backSoundAudioContext == null)
+                if (_SoundAudioContext == null)
                     return false;
                 
-                return _backSoundAudioContext.isPlaying;
+                return _SoundAudioContext.isPlaying;
             }
         }
 
@@ -124,23 +124,24 @@ namespace HT.Framework
             _module = Module as WXAudioManager;
         }
 
-        public void PreDownloadAudios(string[] clipParhs)
+        private List<string> AudioContexts = new List<string>();
+        public void PreDownloadAudios(string[] clipPaths)
         {
-            int leng = clipParhs.Length;
-#if UNITY_EDITOR
-            for (int i = 0; i < leng-1; i++)
-            {
-                Log.Info(StringToolkit.Concat("Audio预下载完成：",clipParhs[i]));
-            }
-#else
-            WX.PreDownloadAudios(paths, (int res) =>
+            WX.PreDownloadAudios(clipPaths, (int res) =>
             {
                 if (res == 0)
                 {
-                    Log.Info("音频预加载成功！");
+                    for (int i = 0; i < clipPaths.Length-1; i++)
+                    {
+                        WX.CreateInnerAudioContext(new InnerAudioContextParam()
+                        {
+                            src = clipPaths[i],
+                            needDownload = true
+                        });
+                        AudioContexts.Add(clipPaths[i]);
+                    }
                 }
             });
-#endif
         }
 
         /// <summary>
@@ -189,26 +190,41 @@ namespace HT.Framework
         /// <param name="startTime">开始播放的位置（单位：s），默认为 0</param>>
         public void PlayBackgroundMusic(string clipPath, bool isLoop = true, float speed = 1, float startTime = 0)
         {
-            _backgroundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
+            if (AudioContexts.Contains(clipPath))
             {
-                src = clipPath,
-            });
-            _backgroundAudioContext.OnCanplay(() =>
-            {
+                WX.WriteLog(StringToolkit.Concat("当前音频：",clipPath));
+                _backgroundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
+                {
+                    src = clipPath,
+                });
                 _backgroundAudioContext.Play();
                 _backgroundAudioContext.loop = isLoop;
                 _backgroundAudioContext.playbackRate = speed;
                 _backgroundAudioContext.startTime = startTime;
                 _backgroundAudioContext.mute = Mute;
                 _backgroundAudioContext.volume = _backgroundVolume;
-            });
-            _backgroundAudioContext.OnEnded(() =>
+            }
+            else
             {
-                if (!isLoop)
+                _backgroundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
                 {
-                    _backgroundAudioContext.Stop();
-                    _backgroundAudioContext = null;
+                    src = clipPath,
+                    needDownload = true
+                });
+            }
+            _backgroundAudioContext.OnCanplay(() =>
+            {
+                //如果音频缓存中没有这个音频，这添加到缓存
+                if (!AudioContexts.Contains(clipPath))
+                {
+                    AudioContexts.Add(clipPath);
                 }
+                _backgroundAudioContext.Play();
+                _backgroundAudioContext.loop = isLoop;
+                _backgroundAudioContext.playbackRate = speed;
+                _backgroundAudioContext.startTime = startTime;
+                _backgroundAudioContext.mute = Mute;
+                _backgroundAudioContext.volume = _backgroundVolume;
             });
         }
         
@@ -253,25 +269,43 @@ namespace HT.Framework
         /// <param name="speed">播放速度。范围 0.5-2.0，默认为 1。（Android 需要 6 及以上版本）</param>
         public void PlaySound(string clipPath, bool isLoop = false, float speed = 1,float startTime = 1)
         {
-            
-            _backSoundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
+            // WX.ShortAudioPlayer.StopOthersAndPlay(clipPath,_soundVolume);
+            if (AudioContexts.Contains(clipPath))
             {
-                src = clipPath,
-            });
-            _backSoundAudioContext.OnCanplay(() =>
+                WX.WriteLog(StringToolkit.Concat("当前音频：",clipPath));
+                _SoundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
+                {
+                    src = clipPath,
+                });
+                _SoundAudioContext.Play();
+                _SoundAudioContext.loop = isLoop;
+                _SoundAudioContext.playbackRate = speed;
+                _SoundAudioContext.startTime = startTime;
+                _SoundAudioContext.mute = Mute;
+                _SoundAudioContext.volume = _backgroundVolume;
+            }
+            else
             {
-                _backSoundAudioContext.Play();
-                _backSoundAudioContext.loop = isLoop;
-                _backSoundAudioContext.playbackRate = speed;
-                _backSoundAudioContext.startTime = startTime;
-                _backSoundAudioContext.mute = Mute;
-                _backSoundAudioContext.volume = _backgroundVolume;
-            });
-            _backSoundAudioContext.OnEnded(() =>
-            {
-                _backSoundAudioContext.Stop();
-                _backSoundAudioContext = null;
-            });
+                _SoundAudioContext = WX.CreateInnerAudioContext(new InnerAudioContextParam()
+                {
+                    src = clipPath,
+                    needDownload = true
+                });
+                _SoundAudioContext.OnCanplay(() =>
+                {
+                    //如果音频缓存中没有这个音频，这添加到缓存
+                    if (!AudioContexts.Contains(clipPath))
+                    {
+                        AudioContexts.Add(clipPath);
+                    }
+                    _SoundAudioContext.Play();
+                    _SoundAudioContext.loop = isLoop;
+                    _SoundAudioContext.playbackRate = speed;
+                    _SoundAudioContext.startTime = startTime;
+                    _SoundAudioContext.mute = Mute;
+                    _SoundAudioContext.volume = _backgroundVolume;
+                });
+            }
         }
         
         /// <summary>
@@ -280,7 +314,8 @@ namespace HT.Framework
         /// <param name="clipPath">音乐文件在Assets下的路径如 Source/Sounds/ShootingSound/card.wav</param>
         public void StopSound()
         {
-            _backSoundAudioContext.Stop();
+            // WX.ShortAudioPlayer.Stop(clipPath);
+            _SoundAudioContext.Stop();
         }
     }
 }

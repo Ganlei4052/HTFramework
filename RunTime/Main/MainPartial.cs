@@ -191,7 +191,7 @@ namespace HT.Framework
                 throw new HTFrameworkException(HTFrameworkModule.Main, "框架致命错误：不能存在两个及以上Main主模块！");
             }
 
-            //OnInit();
+            OnInit();
         }
 
         private void Start()
