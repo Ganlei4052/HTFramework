@@ -44,14 +44,14 @@ namespace HT.Framework
         /// </summary>
         internal string GetResourceFullPath()
         {
-            return "ResourcesPath: Resources/" + ResourcePath;
+            return $"ResourcesPath: Resources/{ResourcePath}";
         }
         /// <summary>
         /// 获取资源的AssetBundle全路径
         /// </summary>
         internal string GetAssetBundleFullPath(string assetBundleRootPath)
         {
-            return string.Format("AssetBundlePath: {0}{1}  AssetPath:{2}", assetBundleRootPath, AssetBundleName, AssetPath);
+            return $"AssetBundlePath: {assetBundleRootPath}{AssetBundleName}  AssetPath:{AssetPath}";
         }
     }
 }

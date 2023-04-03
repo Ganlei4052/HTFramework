@@ -57,7 +57,7 @@ namespace HT.Framework
         /// </summary>
         /// <param name="position">目标位置</param>
         /// <param name="damping">阻尼缓动模式</param>
-        public void SetPosition(Vector3 position, bool damping = true)
+        public void SetPosition(Vector3 position, bool damping)
         {
             if (_isKeepTrack)
             {
@@ -133,7 +133,7 @@ namespace HT.Framework
             if (!CanControl)
                 return;
 
-            if (!IsCanOnUGUI && GlobalTools.IsPointerOverUGUI())
+            if (!IsCanOnUGUI && UIToolkit.IsStayUINotWorld)
                 return;
 
             if (Main.m_Input.GetButton(InputButtonType.MouseMiddle))

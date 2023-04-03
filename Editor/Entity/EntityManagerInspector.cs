@@ -85,7 +85,7 @@ namespace HT.Framework
                                 int n = m;
                                 if (Target.DefineEntityNames.Contains(types[n].FullName))
                                 {
-                                    gm.AddDisabledItem(new GUIContent(types[n].FullName));
+                                    gm.AddDisabledItem(new GUIContent(types[n].FullName), Target.DefineEntityNames[j] == types[n].FullName);
                                 }
                                 else
                                 {
@@ -203,7 +203,7 @@ namespace HT.Framework
             {
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(10);
-                _objectPoolFoldouts[pool.Key] = EditorGUILayout.Foldout(_objectPoolFoldouts[pool.Key], pool.Key.FullName + " [Object Pool]", true);
+                _objectPoolFoldouts[pool.Key] = EditorGUILayout.Foldout(_objectPoolFoldouts[pool.Key], $"{pool.Key.FullName} [Object Pool]", true);
                 GUILayout.EndHorizontal();
 
                 if (_objectPoolFoldouts[pool.Key])

@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
-using System.Reflection;
-using DG.Tweening;
-using System;
 using UnityEngine.UI;
 using UnityEngine.Playables;
+using System;
+using System.Reflection;
+using DG.Tweening;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using System.IO;
 #endif
 
 namespace HT.Framework
@@ -87,7 +89,7 @@ namespace HT.Framework
                     PlayTimelineExecute();
                     break;
                 default:
-                    Log.Warning("步骤控制者：[" + OperationType + " 操作] 没有可以执行的 Execute 定义！");
+                    Log.Warning($"步骤控制者：[{OperationType} 操作] 没有可以执行的 Execute 定义！");
                     break;
             }
         }
@@ -148,7 +150,7 @@ namespace HT.Framework
                 Renderer renderer = Target.GetComponent<Renderer>();
                 if (!renderer)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Renderer！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Renderer！无法播放颜色改变动画！");
                     return;
                 }
                 renderer.material.DOColor(ColorValue, ElapseTime).SetEase(AnimationEase);
@@ -158,7 +160,7 @@ namespace HT.Framework
                 Graphic graphic = Target.GetComponent<Graphic>();
                 if (!graphic)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Graphic！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Graphic！无法播放颜色改变动画！");
                     return;
                 }
                 graphic.DOColor(ColorValue, ElapseTime).SetEase(AnimationEase);
@@ -191,7 +193,7 @@ namespace HT.Framework
         {
             if (!Target.GetComponent<TextMesh>())
             {
-                Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件TextMesh！无法设置TextMesh文本！");
+                Log.Error($"步骤控制者：目标 {Target.name} 丢失组件TextMesh！无法设置TextMesh文本！");
                 return;
             }
             Target.GetComponent<TextMesh>().text = StringValue;
@@ -226,7 +228,7 @@ namespace HT.Framework
             else
             {
 
-                Log.Error("步骤控制者：未获取到组件类型 " + StringValue + " ！");
+                Log.Error($"步骤控制者：未获取到组件类型 {StringValue} ！");
             }
         }
         private void TransformExecute()
@@ -318,7 +320,7 @@ namespace HT.Framework
                     PlayTimelineSkip();
                     break;
                 default:
-                    Log.Warning("步骤控制者：[" + OperationType + " 操作] 没有可以执行的 Skip 定义！");
+                    Log.Warning($"步骤控制者：[{OperationType} 操作] 没有可以执行的 Skip 定义！");
                     break;
             }
         }
@@ -379,7 +381,7 @@ namespace HT.Framework
                 Renderer renderer = Target.GetComponent<Renderer>();
                 if (!renderer)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Renderer！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Renderer！无法播放颜色改变动画！");
                     return;
                 }
                 renderer.material.DOColor(ColorValue, ElapseTime).SetEase(AnimationEase);
@@ -389,7 +391,7 @@ namespace HT.Framework
                 Graphic graphic = Target.GetComponent<Graphic>();
                 if (!graphic)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Graphic！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Graphic！无法播放颜色改变动画！");
                     return;
                 }
                 graphic.DOColor(ColorValue, ElapseTime).SetEase(AnimationEase);
@@ -422,7 +424,7 @@ namespace HT.Framework
         {
             if (!Target.GetComponent<TextMesh>())
             {
-                Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件TextMesh！无法设置TextMesh文本！");
+                Log.Error($"步骤控制者：目标 {Target.name} 丢失组件TextMesh！无法设置TextMesh文本！");
                 return;
             }
             Target.GetComponent<TextMesh>().text = StringValue;
@@ -456,7 +458,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error("步骤控制者：未获取到组件类型 " + StringValue + " ！");
+                Log.Error($"步骤控制者：未获取到组件类型 {StringValue} ！");
             }
         }
         private void TransformSkip()
@@ -548,7 +550,7 @@ namespace HT.Framework
                     PlayTimelineSkipImmediate();
                     break;
                 default:
-                    Log.Warning("步骤控制者：[" + OperationType + " 操作] 没有可以执行的 SkipImmediate 定义！");
+                    Log.Warning($"步骤控制者：[{OperationType} 操作] 没有可以执行的 SkipImmediate 定义！");
                     break;
             }
         }
@@ -578,7 +580,7 @@ namespace HT.Framework
                 Renderer renderer = Target.GetComponent<Renderer>();
                 if (!renderer)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Renderer！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Renderer！无法播放颜色改变动画！");
                     return;
                 }
                 renderer.material.color = ColorValue;
@@ -588,7 +590,7 @@ namespace HT.Framework
                 Graphic graphic = Target.GetComponent<Graphic>();
                 if (!graphic)
                 {
-                    Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件Graphic！无法播放颜色改变动画！");
+                    Log.Error($"步骤控制者：目标 {Target.name} 丢失组件Graphic！无法播放颜色改变动画！");
                     return;
                 }
                 graphic.color = ColorValue;
@@ -621,7 +623,7 @@ namespace HT.Framework
         {
             if (!Target.GetComponent<TextMesh>())
             {
-                Log.Error("步骤控制者：目标 " + Target.name + " 丢失组件TextMesh！无法设置TextMesh文本！");
+                Log.Error($"步骤控制者：目标 {Target.name} 丢失组件TextMesh！无法设置TextMesh文本！");
                 return;
             }
             Target.GetComponent<TextMesh>().text = StringValue;
@@ -655,7 +657,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error("步骤控制者：未获取到组件类型 " + StringValue + " ！");
+                Log.Error($"步骤控制者：未获取到组件类型 {StringValue} ！");
             }
         }
         private void TransformSkipImmediate()
@@ -677,7 +679,9 @@ namespace HT.Framework
             PlayableDirector director = Target.GetComponent<PlayableDirector>();
             if (director && director.playableAsset)
             {
+                director.Play();
                 director.time = director.duration;
+                director.Stop();
             }
         }
         #endregion
@@ -774,7 +778,7 @@ namespace HT.Framework
                     PlayTimelineGUI(getWord);
                     break;
                 default:
-                    Log.Warning("步骤控制者：[" + OperationType + " 操作] 没有可以执行的 OnEditorGUI 定义！");
+                    Log.Warning($"步骤控制者：[{OperationType} 操作] 没有可以执行的 OnEditorGUI 定义！");
                     break;
             }
         }
@@ -987,11 +991,17 @@ namespace HT.Framework
                     MethodInfo[] mis = mono.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
                     foreach (MethodInfo mi in mis)
                     {
-                        if (mi.Name.Contains("set_") || mi.Name.Contains("get_") || mi.GetParameters().Length > 0 || mi.ReturnType.Name != "Void")
-                        {
+                        if (mi.Name.StartsWith("set_") || mi.Name.StartsWith("get_")
+                            || mi.Name.Contains("<") || mi.Name.Contains(">")
+                            || mi.GetParameters().Length > 0 || mi.ReturnType.Name != "Void")
                             continue;
-                        }
-                        gm.AddItem(new GUIContent(mono.GetType().Name + "/" + mi.Name + "()"), StringValue == mi.Name, () =>
+                        
+                        if (mi.Name == "Awake" || mi.Name == "Start" || mi.Name == "Update"
+                            || mi.Name == "OnEnable" || mi.Name == "OnDisable" || mi.Name == "OnDestroy"
+                            || mi.Name == "OnGUI" || mi.Name == "Finalize")
+                            continue;
+
+                        gm.AddItem(new GUIContent($"{mono.GetType().FullName}/void {mi.Name}()"), StringValue == mi.Name, () =>
                         {
                             StringValue = mi.Name;
                         });
@@ -999,14 +1009,23 @@ namespace HT.Framework
                 }
                 gm.ShowAsContext();
             }
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("");
+            GUILayout.FlexibleSpace();
+            GUI.enabled = Target && StringValue != "<None>";
+            if (GUILayout.Button(getWord("Edit"), GUILayout.Width(40)))
+            {
+                OpenScriptAction(Target, StringValue);
+            }
             GUI.enabled = true;
             GUILayout.EndHorizontal();
         }
         private void ActionArgsGUI(HTFFunc<string, string> getWord)
         {
-            GUI.enabled = Target;
-
             GUILayout.BeginHorizontal();
+            GUI.enabled = Target;
             GUILayout.Label(getWord("Action") + ":", GUILayout.Width(50));
             string value = StringValue == "<None>" ? getWord(StringValue) : StringValue;
             if (GUILayout.Button(value, EditorStyles.popup, GUILayout.Width(135)))
@@ -1019,11 +1038,15 @@ namespace HT.Framework
                     foreach (MethodInfo mi in mis)
                     {
                         ParameterInfo[] pis = mi.GetParameters();
-                        if (mi.Name.Contains("set_") || mi.Name.Contains("get_") || pis.Length != 1 || pis[0].ParameterType.Name != "String" || mi.ReturnType.Name != "Void")
-                        {
+                        if (mi.Name.StartsWith("set_") || mi.Name.StartsWith("get_")
+                            || mi.Name.Contains("<") || mi.Name.Contains(">")
+                            || pis.Length != 1 || pis[0].ParameterType != typeof(string) || mi.ReturnType.Name != "Void")
                             continue;
-                        }
-                        gm.AddItem(new GUIContent(mono.GetType().Name + "/" + mi.Name + "(string)"), StringValue == mi.Name, () =>
+
+                        if (mi.Name == "SendMessage" || mi.Name == "SendMessageUpwards" || mi.Name == "BroadcastMessage")
+                            continue;
+
+                        gm.AddItem(new GUIContent($"{mono.GetType().FullName}/void {mi.Name}(string {pis[0].Name})"), StringValue == mi.Name, () =>
                         {
                             StringValue = mi.Name;
                         });
@@ -1038,7 +1061,16 @@ namespace HT.Framework
             StringValue2 = EditorGUILayout.TextField(StringValue2);
             GUILayout.EndHorizontal();
 
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("");
+            GUILayout.FlexibleSpace();
+            GUI.enabled = Target && StringValue != "<None>";
+            if (GUILayout.Button(getWord("Edit"), GUILayout.Width(40)))
+            {
+                OpenScriptActionArgs(Target, StringValue);
+            }
             GUI.enabled = true;
+            GUILayout.EndHorizontal();
         }
         private void CameraFollowGUI(HTFFunc<string, string> getWord)
         {
@@ -1193,7 +1225,7 @@ namespace HT.Framework
             {
                 GUILayout.BeginHorizontal();
                 GUI.color = Color.cyan;
-                GUILayout.Label(string.Format("{0} {1} {2}", getWord("Delay Time"), ElapseTime, getWord("Second")));
+                GUILayout.Label($"{getWord("Delay Time")} {ElapseTime} {getWord("Second")}");
                 GUI.color = Color.white;
                 GUILayout.EndHorizontal();
             }
@@ -1295,25 +1327,48 @@ namespace HT.Framework
         private void ChangeParentGUI(HTFFunc<string, string> getWord)
         {
             #region 父级目标物体丢失，根据目标GUID重新搜寻
-            if (!GameObjectValue)
+            if (GameObjectValue == null)
             {
                 if (StringValue != "<None>")
                 {
-                    GameObjectValue = GameObject.Find(StringValue2);
-                    if (!GameObjectValue)
+                    PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+                    if (prefabStage != null)
                     {
-                        StepTarget[] targets = UnityEngine.Object.FindObjectsOfType<StepTarget>();
-                        foreach (StepTarget target in targets)
+                        GameObjectValue = prefabStage.prefabContentsRoot.FindChildren(StringValue2);
+                        if (GameObjectValue == null)
                         {
-                            if (target.GUID == StringValue && !target.GetComponent<StepPreview>())
+                            StepTarget[] targets = prefabStage.prefabContentsRoot.GetComponentsInChildren<StepTarget>(true);
+                            foreach (StepTarget target in targets)
                             {
-                                GameObjectValue = target.gameObject;
-                                StringValue2 = target.transform.FullName();
-                                break;
+                                if (target.GUID == StringValue && !target.GetComponent<StepPreview>())
+                                {
+                                    GameObjectValue = target.gameObject;
+                                    StringValue2 = target.transform.FullName();
+                                    StringValue2 = StringValue2.Substring(StringValue2.IndexOf("/") + 1);
+                                    break;
+                                }
                             }
                         }
                     }
                     else
+                    {
+                        GameObjectValue = GameObject.Find(StringValue2);
+                        if (GameObjectValue == null)
+                        {
+                            StepTarget[] targets = UnityEngine.Object.FindObjectsOfType<StepTarget>();
+                            foreach (StepTarget target in targets)
+                            {
+                                if (target.GUID == StringValue && !target.GetComponent<StepPreview>())
+                                {
+                                    GameObjectValue = target.gameObject;
+                                    StringValue2 = target.transform.FullName();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (GameObjectValue != null)
                     {
                         StepTarget target = GameObjectValue.GetComponent<StepTarget>();
                         if (!target)
@@ -1387,6 +1442,7 @@ namespace HT.Framework
                     if (target.GUID == "<None>")
                     {
                         target.GUID = Guid.NewGuid().ToString();
+                        EditorUtility.SetDirty(target);
                     }
                     GameObjectValue = parent;
                     StringValue = target.GUID;
@@ -1463,7 +1519,7 @@ namespace HT.Framework
                     ChangeParentPreviewTarget();
                     break;
                 default:
-                    Log.Warning("步骤控制者：[" + OperationType + " 操作] 没有可以执行的 InitPreviewTarget 定义！");
+                    Log.Warning($"步骤控制者：[{OperationType} 操作] 没有可以执行的 InitPreviewTarget 定义！");
                     break;
             }
         }
@@ -1519,6 +1575,76 @@ namespace HT.Framework
             if (GameObjectValue)
             {
                 PreviewTarget.transform.SetParent(GameObjectValue.transform);
+            }
+        }
+
+        private void OpenScriptAction(GameObject target, string methodName)
+        {
+            Component[] monos = target.GetComponents<Component>();
+            foreach (Component mono in monos)
+            {
+                if (mono as MonoBehaviour == null)
+                    continue;
+
+                MethodInfo[] mis = mono.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (MethodInfo mi in mis)
+                {
+                    if (mi.Name == methodName && mi.ReturnType.Name == "Void" && mi.GetParameters().Length == 0)
+                    {
+                        string methodInfo = $"void {methodName}()";
+                        MonoScript monoScript = MonoScript.FromMonoBehaviour(mono as MonoBehaviour);
+                        string path = AssetDatabase.GetAssetPath(monoScript);
+                        path = path.Substring(path.IndexOf('/'));
+                        path = Application.dataPath + path;
+                        if (File.Exists(path))
+                        {
+                            string[] lines = File.ReadAllLines(path);
+                            for (int i = 0; i < lines.Length; i++)
+                            {
+                                if (lines[i].Contains(methodInfo))
+                                {
+                                    AssetDatabase.OpenAsset(monoScript, i + 1);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        private void OpenScriptActionArgs(GameObject target, string methodName)
+        {
+            Component[] monos = target.GetComponents<Component>();
+            foreach (Component mono in monos)
+            {
+                if (mono as MonoBehaviour == null)
+                    continue;
+
+                MethodInfo[] mis = mono.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                foreach (MethodInfo mi in mis)
+                {
+                    ParameterInfo[] pis = mi.GetParameters();
+                    if (mi.Name == methodName && mi.ReturnType.Name == "Void" && pis.Length == 1 && pis[0].ParameterType == typeof(string))
+                    {
+                        string methodInfo = $"void {methodName}(string {pis[0].Name})";
+                        MonoScript monoScript = MonoScript.FromMonoBehaviour(mono as MonoBehaviour);
+                        string path = AssetDatabase.GetAssetPath(monoScript);
+                        path = path.Substring(path.IndexOf('/'));
+                        path = Application.dataPath + path;
+                        if (File.Exists(path))
+                        {
+                            string[] lines = File.ReadAllLines(path);
+                            for (int i = 0; i < lines.Length; i++)
+                            {
+                                if (lines[i].Contains(methodInfo))
+                                {
+                                    AssetDatabase.OpenAsset(monoScript, i + 1);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
 #endif

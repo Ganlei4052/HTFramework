@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using UnityEditor;
-using UnityEditor.Experimental.SceneManagement;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace HT.Framework
@@ -22,11 +22,11 @@ namespace HT.Framework
         /// </summary>
         static StepEditorWindow()
         {
-            AdvancedSearchHandlers.Add("所有禁用的步骤", (stepContent) =>
+            AdvancedSearchHandlers.Add("禁用的步骤", (stepContent) =>
             {
                 return !stepContent.IsEnable;
             });
-            AdvancedSearchHandlers.Add("所有存在空目标的步骤", (stepContent) =>
+            AdvancedSearchHandlers.Add("存在空目标的步骤", (stepContent) =>
             {
                 if (stepContent.TargetGUID == "<None>")
                 {
@@ -40,11 +40,22 @@ namespace HT.Framework
                     });
                 }
             });
-            AdvancedSearchHandlers.Add("所有包含[行为]节点的步骤", (stepContent) =>
+            AdvancedSearchHandlers.Add("名称、提示中存在空格的步骤", (stepContent) =>
+            {
+                return stepContent.Name.Contains(' ') || stepContent.Prompt.Contains(' ');
+            });
+            AdvancedSearchHandlers.Add("包含<行为>节点的步骤", (stepContent) =>
             {
                 return stepContent.Operations.Exists((o) =>
                 {
                     return o.OperationType == StepOperationType.Action || o.OperationType == StepOperationType.ActionArgs;
+                });
+            });
+            AdvancedSearchHandlers.Add("包含<播放时间线>节点的步骤", (stepContent) =>
+            {
+                return stepContent.Operations.Exists((o) =>
+                {
+                    return o.OperationType == StepOperationType.PlayTimeline;
                 });
             });
         }
@@ -260,6 +271,15 @@ namespace HT.Framework
                                 usedTargets.Add(operation.TargetGUID);
                             }
                         }
+
+                        for (int j = 0; j < content.Parameters.Count; j++)
+                        {
+                            StepParameter parameter = content.Parameters[j];
+                            if (parameter.Type == StepParameter.ParameterType.GameObject && !usedTargets.Contains(parameter.GameObjectGUID) && parameter.GameObjectGUID != "<None>")
+                            {
+                                usedTargets.Add(parameter.GameObjectGUID);
+                            }
+                        }
                     }
 
                     GameObject[] rootObjs = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
@@ -270,7 +290,24 @@ namespace HT.Framework
                         {
                             if (!usedTargets.Contains(target.GUID))
                             {
+                                GameObject obj = target.gameObject;
                                 DestroyImmediate(target);
+                                HasChanged(obj);
+                            }
+                        }
+                    }
+
+                    PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+                    if (prefabStage != null)
+                    {
+                        StepTarget[] targets = prefabStage.prefabContentsRoot.GetComponentsInChildren<StepTarget>(true);
+                        foreach (StepTarget target in targets)
+                        {
+                            if (!usedTargets.Contains(target.GUID))
+                            {
+                                GameObject obj = target.gameObject;
+                                DestroyImmediate(target);
+                                HasChanged(obj);
                             }
                         }
                     }
@@ -557,16 +594,17 @@ namespace HT.Framework
                     if (string.IsNullOrEmpty(_stepListAdvancedSearch) || _contentAsset.Content[i].IsSearched)
                     {
                         GUILayout.BeginHorizontal();
-                        GUI.color = Color.white;
+                        GUI.color = _contentAsset.Content[i].IsEnable ? Color.white : Color.gray;
                         GUILayout.Label(_stepGC, GUILayout.Height(20), GUILayout.Width(20));
                         if (_isShowAncillary && !string.IsNullOrEmpty(_contentAsset.Content[i].Ancillary))
                         {
                             GUI.color = Color.yellow;
-                            GUILayout.Label("[" + _contentAsset.Content[i].Ancillary + "]", GUILayout.Height(16));
+                            GUILayout.Label($"[{_contentAsset.Content[i].Ancillary}]", GUILayout.Height(16));
                         }
                         GUI.color = _contentAsset.Content[i].IsEnable ? Color.white : Color.gray;
-                        string style = _currentStepIndex == i ? "SelectionRect" : "PrefixLabel";
-                        if (GUILayout.Button(i + "." + showName, style, GUILayout.Height(20), GUILayout.ExpandWidth(true)))
+                        GUI.backgroundColor = _currentStepIndex == i ? Color.cyan : Color.white;
+                        string style = _currentStepIndex == i ? "TV Selection" : "PrefixLabel";
+                        if (GUILayout.Button($"{i}.{showName}", style, GUILayout.Height(20), GUILayout.ExpandWidth(true)))
                         {
                             SelectStepContent(i);
                             SelectStepOperation(-1);
@@ -576,12 +614,14 @@ namespace HT.Framework
                         if (GUILayout.Button(_contentAsset.Content[i].IsEnable ? _enableGC : _disableGC, "InvisibleButton", GUILayout.Height(20), GUILayout.Width(20)))
                         {
                             _contentAsset.Content[i].IsEnable = !_contentAsset.Content[i].IsEnable;
+                            HasChanged(_contentAsset);
                         }
                         GUILayout.EndHorizontal();
                     }
                 }
             }
             GUI.color = Color.white;
+            GUI.backgroundColor = Color.white;
             GUILayout.EndScrollView();
             #endregion
 
@@ -1747,7 +1787,7 @@ namespace HT.Framework
         /// </summary>
         private void DeleteStepContent(int contentIndex)
         {
-            if (EditorUtility.DisplayDialog("Prompt", "Are you sure delete step " + _contentAsset.Content[contentIndex].Name + "？", "Yes", "No"))
+            if (EditorUtility.DisplayDialog("Prompt", $"Are you sure delete step {_contentAsset.Content[contentIndex].Name}？", "Yes", "No"))
             {
                 StopPreviewInStep(contentIndex);
                 _contentAsset.Content.RemoveAt(contentIndex);
@@ -1886,7 +1926,7 @@ namespace HT.Framework
                     showName = content.Name;
                     break;
                 case StepListShowType.IDAndName:
-                    showName = content.GUID + " " + content.Name;
+                    showName = $"{content.GUID} {content.Name}";
                     break;
                 default:
                     showName = "<None>";
@@ -1894,11 +1934,11 @@ namespace HT.Framework
             }
             if (_isShowTrigger)
             {
-                showName = string.Format("{0} [{1}]", showName, GetWord(content.Trigger.ToString()));
+                showName = $"{showName} [{GetWord(content.Trigger.ToString())}]";
             }
             if (_isShowHelper && content.Helper != "<None>")
             {
-                showName = string.Format("{0} [{1}]", showName, content.Helper);
+                showName = $"{showName} [{content.Helper}]";
             }
             return showName;
         }
@@ -1918,7 +1958,7 @@ namespace HT.Framework
             {
                 gm.AddItem(new GUIContent(GetWord("Copy") + " " + _currentStepObj.Name), false, () =>
                 {
-                    GUIUtility.systemCopyBuffer = string.Format("StepContent|{0}|{1}", assetPath, _currentStepObj.GUID);
+                    GUIUtility.systemCopyBuffer = $"StepContent|{assetPath}|{_currentStepObj.GUID}";
                 });
             }
 
@@ -1966,6 +2006,7 @@ namespace HT.Framework
                 {
                     _contentAsset.Content[i].IsEnable = true;
                 }
+                HasChanged(_contentAsset);
             });
             gm.AddItem(new GUIContent(GetWord("Disable All Steps")), false, () =>
             {
@@ -1973,6 +2014,7 @@ namespace HT.Framework
                 {
                     _contentAsset.Content[i].IsEnable = false;
                 }
+                HasChanged(_contentAsset);
             });
 
             gm.ShowAsContext();
@@ -1992,7 +2034,7 @@ namespace HT.Framework
             {
                 gm.AddItem(new GUIContent(GetWord("Copy") + " " + _currentOperationObj.Name), false, () =>
                 {
-                    GUIUtility.systemCopyBuffer = string.Format("StepOperation|{0}|{1}|{2}", assetPath, _currentStepObj.GUID, _currentOperationObj.GUID);
+                    GUIUtility.systemCopyBuffer = $"StepOperation|{assetPath}|{_currentStepObj.GUID}|{_currentOperationObj.GUID}";
                 });
             }
         }
@@ -2125,7 +2167,7 @@ namespace HT.Framework
         /// </summary>
         public void OpenHelperScript(string helper)
         {
-            MonoScriptToolkit.OpenMonoScript(helper);
+            CSharpScriptToolkit.OpenScript(helper);
         }
         /// <summary>
         /// 新建助手脚本
@@ -2143,7 +2185,7 @@ namespace HT.Framework
             content.GetExecuteTwice(_operationIndexs);
             foreach (var item in _operationIndexs)
             {
-                Log.Warning("注意：操作节点【" + content.Operations[item].Name + "】有两次或以上连线接入，可能会被多次执行！");
+                Log.Warning($"注意：操作节点【{content.Operations[item].Name}】有两次或以上连线接入，可能会被多次执行！");
             }
             _operationIndexs.Clear();
 
@@ -2237,7 +2279,7 @@ namespace HT.Framework
 
             if (operation.Target != null)
                 return;
-            
+
             PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {

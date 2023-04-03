@@ -96,7 +96,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
+                Log.Error($"注册接口失败：已存在名为 {interfaceName} 的网络接口！");
             }
         }
         /// <summary>
@@ -119,7 +119,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
+                Log.Error($"注册接口失败：已存在名为 {interfaceName} 的网络接口！");
             }
         }
         /// <summary>
@@ -142,7 +142,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
+                Log.Error($"注册接口失败：已存在名为 {interfaceName} 的网络接口！");
             }
         }
         /// <summary>
@@ -169,7 +169,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
+                Log.Error($"注册接口失败：已存在名为 {interfaceName} 的网络接口！");
             }
         }
         /// <summary>
@@ -188,7 +188,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error(string.Format("注册接口失败：已存在名为 {0} 的网络接口！", interfaceName));
+                Log.Error($"注册接口失败：已存在名为 {interfaceName} 的网络接口！");
             }
         }
         /// <summary>
@@ -261,7 +261,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起网络请求失败：不存在名为 {0} 的网络接口！", interfaceName));
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, $"发起网络请求失败：不存在名为 {interfaceName} 的网络接口！");
             }
             return null;
         }
@@ -290,7 +290,7 @@ namespace HT.Framework
 
                 DateTime end = DateTime.Now;
 
-                if (!request.isNetworkError && !request.isHttpError)
+                if (request.result == UnityWebRequest.Result.Success)
                 {
                     Log.Info(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 收到回复：{4}字节  string:{5}"
                         , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, wif.OnGetDownloadString(request.downloadHandler)));
@@ -299,7 +299,8 @@ namespace HT.Framework
                 }
                 else
                 {
-                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), wif, url, end.ToString("mm:ss:fff"), request.error));
+                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}"
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.error));
 
                     wif.OnRequestFinished(null);
                 }
@@ -326,7 +327,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起网络请求失败：不存在名为 {0} 的网络接口！", interfaceName));
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, $"发起网络请求失败：不存在名为 {interfaceName} 的网络接口！");
             }
             return null;
         }
@@ -343,7 +344,7 @@ namespace HT.Framework
 
                 DateTime end = DateTime.Now;
 
-                if (!request.isNetworkError && !request.isHttpError)
+                if (request.result == UnityWebRequest.Result.Success)
                 {
                     Log.Info(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 收到回复：{4}字节  string:{5}"
                         , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.downloadHandler.data.Length, wif.OnGetDownloadString(request.downloadHandler)));
@@ -352,7 +353,8 @@ namespace HT.Framework
                 }
                 else
                 {
-                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}", begin.ToString("mm:ss:fff"), wif, url, end.ToString("mm:ss:fff"), request.error));
+                    Log.Error(string.Format("[{0}] 发起网络请求：[{1}] {2}\r\n[{3}] 网络请求出错：{4}"
+                        , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), request.error));
 
                     wif.OnRequestFinished(null);
                 }
@@ -379,7 +381,7 @@ namespace HT.Framework
             }
             else
             {
-                throw new HTFrameworkException(HTFrameworkModule.WebRequest, string.Format("发起下载文件请求失败：不存在名为 {0} 的文件请求接口！", interfaceName));
+                throw new HTFrameworkException(HTFrameworkModule.WebRequest, $"发起下载文件请求失败：不存在名为 {interfaceName} 的文件请求接口！");
             }
             return null;
         }
@@ -415,7 +417,7 @@ namespace HT.Framework
 
                 DateTime end = DateTime.Now;
 
-                if (!request.isNetworkError && !request.isHttpError)
+                if (request.result == UnityWebRequest.Result.Success)
                 {
                     Log.Info(string.Format("[{0}] 发起下载文件请求：[{1}] {2}\r\n[{3}] 成功下载至：{4}"
                         , begin.ToString("mm:ss:fff"), wif.Name, url, end.ToString("mm:ss:fff"), wif.Path));

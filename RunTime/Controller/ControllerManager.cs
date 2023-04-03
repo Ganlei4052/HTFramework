@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -38,6 +37,10 @@ namespace HT.Framework
         /// </summary>
         public bool IsEnableBounds = false;
         /// <summary>
+        /// 自由控制：是否启用排斥盒
+        /// </summary>
+        public bool IsEnableRepelBox = false;
+        /// <summary>
         /// 切换至自由控制事件
         /// </summary>
         public event HTFAction SwitchToFreeControlEvent;
@@ -53,7 +56,17 @@ namespace HT.Framework
         /// 射线投射事件(MouseRayTargetBase：当前射中的目标，Vector3：当前射中的点，Vector2：当前鼠标位置转换后的UGUI坐标)
         /// </summary>
         public event HTFAction<MouseRayTargetBase, Vector3, Vector2> RayEvent;
-        
+
+        /// <summary>
+        /// 模块的优先级（越小越优先）
+        /// </summary>
+        public override int Priority
+        {
+            get
+            {
+                return -1;
+            }
+        }
         /// <summary>
         /// 主摄像机
         /// </summary>
@@ -258,6 +271,10 @@ namespace HT.Framework
                 _helper.HighlightAutoDie = value;
             }
         }
+        /// <summary>
+        /// 自由控制：排斥盒
+        /// </summary>
+        internal HashSet<RepelBox> FreeControlRepelBoxs { get; private set; } = new HashSet<RepelBox>();
 
         public override void OnInit()
         {
@@ -307,11 +324,35 @@ namespace HT.Framework
         }
 
         /// <summary>
+        /// 自由控制：添加排斥盒
+        /// </summary>
+        /// <param name="box">排斥盒</param>
+        public void AddRepelBox(RepelBox box)
+        {
+            FreeControlRepelBoxs.Add(box);
+        }
+        /// <summary>
+        /// 自由控制：移除排斥盒
+        /// </summary>
+        /// <param name="box">排斥盒</param>
+        public void RemoveRepelBox(RepelBox box)
+        {
+            FreeControlRepelBoxs.Remove(box);
+        }
+        /// <summary>
+        /// 自由控制：清空排斥盒
+        /// </summary>
+        public void ClearRepelBox()
+        {
+            FreeControlRepelBoxs.Clear();
+        }
+
+        /// <summary>
         /// 自由控制：设置摄像机注视点
         /// </summary>
         /// <param name="point">目标位置</param>
         /// <param name="damping">阻尼缓动模式</param>
-        public void SetLookPoint(Vector3 point, bool damping = true)
+        public void SetLookPoint(Vector3 point, bool damping = false)
         {
             _helper.SetLookPoint(point, damping);
         }

@@ -228,6 +228,87 @@ namespace HT.Framework
 
         #endregion
 
+        #region Behaviour
+        private Dictionary<HTBehaviour, IUpdateFrame> _updateFrameBehaviours = new Dictionary<HTBehaviour, IUpdateFrame>();
+        private Dictionary<HTBehaviour, IUpdateSecond> _updateSecondBehaviours = new Dictionary<HTBehaviour, IUpdateSecond>();
+        private float _timer = 0;
+
+        private void BehaviourUpdate()
+        {
+            if (Pause)
+                return;
+
+            if (_updateFrameBehaviours.Count > 0)
+            {
+                foreach (var behaviour in _updateFrameBehaviours)
+                {
+                    if (behaviour.Key != null && behaviour.Key.enabled && behaviour.Key.gameObject.activeSelf && behaviour.Value != null)
+                    {
+                        behaviour.Value.OnUpdateFrame();
+                    }
+                }
+            }
+
+            if (_timer >= 1)
+            {
+                _timer -= 1;
+                if (_updateSecondBehaviours.Count > 0)
+                {
+                    foreach (var behaviour in _updateSecondBehaviours)
+                    {
+                        if (behaviour.Key != null && behaviour.Key.enabled && behaviour.Key.gameObject.activeSelf && behaviour.Value != null)
+                        {
+                            behaviour.Value.OnUpdateSecond();
+                        }
+                    }
+                }
+            }
+            else
+            {
+                _timer += Time.deltaTime;
+            }
+        }
+
+        /// <summary>
+        /// 注册行为类
+        /// </summary>
+        /// <param name="behaviour">行为类对象</param>
+        internal void RegisterBehaviour(HTBehaviour behaviour)
+        {
+            IUpdateFrame updateFrame = behaviour as IUpdateFrame;
+            if (updateFrame != null)
+            {
+                if (!_updateFrameBehaviours.ContainsKey(behaviour))
+                    _updateFrameBehaviours.Add(behaviour, updateFrame);
+            }
+            IUpdateSecond updateSecond = behaviour as IUpdateSecond;
+            if (updateSecond != null)
+            {
+                if (!_updateSecondBehaviours.ContainsKey(behaviour))
+                    _updateSecondBehaviours.Add(behaviour, updateSecond);
+            }
+        }
+        /// <summary>
+        /// 注销行为类
+        /// </summary>
+        /// <param name="behaviour">行为类对象</param>
+        internal void UnregisterBehaviour(HTBehaviour behaviour)
+        {
+            IUpdateFrame updateFrame = behaviour as IUpdateFrame;
+            if (updateFrame != null)
+            {
+                if (_updateFrameBehaviours.ContainsKey(behaviour))
+                    _updateFrameBehaviours.Remove(behaviour);
+            }
+            IUpdateSecond updateSecond = behaviour as IUpdateSecond;
+            if (updateSecond != null)
+            {
+                if (_updateSecondBehaviours.ContainsKey(behaviour))
+                    _updateSecondBehaviours.Remove(behaviour);
+            }
+        }
+        #endregion
+
         #region Module
 
         /// <summary>
@@ -409,14 +490,22 @@ namespace HT.Framework
                     }
                     else
                     {
+<<<<<<< HEAD
                         throw new HTFrameworkException(HTFrameworkModule.Main,
                             "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 的 InternalModule 标记与已有模块重复！");
+=======
+                        throw new HTFrameworkException(HTFrameworkModule.Main, $"获取内置模块失败：内置模块类 {modules[i].GetType().FullName} 的 InternalModule 标记与已有模块重复！");
+>>>>>>> master
                     }
                 }
                 else
                 {
+<<<<<<< HEAD
                     throw new HTFrameworkException(HTFrameworkModule.Main,
                         "获取内置模块失败：内置模块类 " + modules[i].GetType().FullName + " 丢失了 InternalModule 标记！");
+=======
+                    throw new HTFrameworkException(HTFrameworkModule.Main, $"获取内置模块失败：内置模块类 {modules[i].GetType().FullName} 丢失了 InternalModule 标记！");
+>>>>>>> master
                 }
             }
 
@@ -516,8 +605,12 @@ namespace HT.Framework
             }
             else
             {
+<<<<<<< HEAD
                 throw new HTFrameworkException(HTFrameworkModule.Main,
                     "获取内置模块失败：不存在名为 " + moduleName.ToString() + " 的内置模块！");
+=======
+                throw new HTFrameworkException(HTFrameworkModule.Main, $"获取内置模块失败：不存在名为 {moduleName} 的内置模块！");
+>>>>>>> master
             }
         }
 
@@ -562,12 +655,12 @@ namespace HT.Framework
                         }
                         else
                         {
-                            Log.Error(string.Format("创建授权者失败：授权者类 {0} 必须继承至基类：LicenserBase！", LicenserType));
+                            Log.Error($"创建授权者失败：授权者类 {LicenserType} 必须继承至基类：LicenserBase！");
                         }
                     }
                     else
                     {
-                        Log.Error(string.Format("创建授权者失败：丢失授权者类 {0}！", LicenserType));
+                        Log.Error($"创建授权者失败：丢失授权者类 {LicenserType}！");
                     }
                 }
                 else
@@ -648,12 +741,12 @@ namespace HT.Framework
                     }
                     else
                     {
-                        Log.Error(string.Format("创建数据模型失败：数据模型类 {0} 必须继承至基类：DataModelBase！", DataModelTypes[i]));
+                        Log.Error($"创建数据模型失败：数据模型类 {DataModelTypes[i]} 必须继承至基类：DataModelBase！");
                     }
                 }
                 else
                 {
-                    Log.Error(string.Format("创建数据模型失败：丢失数据模型类 {0}！", DataModelTypes[i]));
+                    Log.Error($"创建数据模型失败：丢失数据模型类 {DataModelTypes[i]}！");
                 }
             }
         }
@@ -812,7 +905,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error("获取参数失败：当前不存在参数 " + parameterName + "！");
+                Log.Error($"获取参数失败：当前不存在参数 {parameterName}！");
                 return null;
             }
         }
@@ -831,7 +924,7 @@ namespace HT.Framework
             }
             else
             {
-                Log.Error("获取参数失败：当前不存在参数 " + parameterName + "！");
+                Log.Error($"获取参数失败：当前不存在参数 {parameterName}！");
                 return null;
             }
         }
@@ -1273,16 +1366,28 @@ namespace HT.Framework
 
         private List<HTFAction> _actionQueue = new List<HTFAction>();
         private List<HTFAction> _actionExecuteQueue = new List<HTFAction>();
-        private bool _isCanDoQueue = false;
+        private object _mutex = new object();
 
         private void UtilityUpdate()
         {
-            if (_isCanDoQueue)
+            if (_actionQueue.Count > 0)
             {
-                _actionExecuteQueue.Clear();
-                _actionExecuteQueue.AddRange(_actionQueue);
-                _actionQueue.Clear();
+                lock (_mutex)
+                {
+                    _actionExecuteQueue.Clear();
+                    _actionExecuteQueue.AddRange(_actionQueue);
+                    _actionQueue.Clear();
+                }
             }
+            if (_actionExecuteQueue.Count > 0)
+            {
+                for (int i = 0; i < _actionExecuteQueue.Count; i++)
+                {
+                    _actionExecuteQueue[i]();
+                }
+                _actionExecuteQueue.Clear();
+            }
+<<<<<<< HEAD
 
             for (int i = 0; i < _actionExecuteQueue.Count; i++)
             {
@@ -1290,6 +1395,8 @@ namespace HT.Framework
             }
 
             _actionExecuteQueue.Clear();
+=======
+>>>>>>> master
         }
 
         /// <summary>
@@ -1298,9 +1405,10 @@ namespace HT.Framework
         /// <param name="action">执行委托</param>
         public void QueueOnMainThread(HTFAction action)
         {
-            _isCanDoQueue = false;
-            _actionQueue.Add(action);
-            _isCanDoQueue = true;
+            lock (_mutex)
+            {
+                _actionQueue.Add(action);
+            }
         }
 
         /// <summary>
@@ -1319,8 +1427,12 @@ namespace HT.Framework
                 }
                 catch (Exception e)
                 {
+<<<<<<< HEAD
                     string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName,
                         action.Method.Name, e.Message);
+=======
+                    string error = $"子线程执行中出现异常，子线程方法：{action.Target.GetType().FullName}.{action.Method.Name}，异常信息：{e.Message}";
+>>>>>>> master
                     Log.Error(error);
                 }
                 finally
@@ -1351,8 +1463,12 @@ namespace HT.Framework
                 }
                 catch (Exception e)
                 {
+<<<<<<< HEAD
                     string error = string.Format("子线程执行中出现异常，子线程方法：{0}.{1}，异常信息：{2}", action.Target.GetType().FullName,
                         action.Method.Name, e.Message);
+=======
+                    string error = $"子线程执行中出现异常，子线程方法：{action.Target.GetType().FullName}.{action.Method.Name}，异常信息：{e.Message}";
+>>>>>>> master
                     Log.Error(error);
                 }
                 finally

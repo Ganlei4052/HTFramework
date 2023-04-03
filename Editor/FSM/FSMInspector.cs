@@ -89,7 +89,7 @@ namespace HT.Framework
 
                             if (Target.States.Contains(types[j].FullName))
                             {
-                                gm.AddDisabledItem(new GUIContent(stateName));
+                                gm.AddDisabledItem(new GUIContent(stateName), true);
                             }
                             else
                             {
@@ -219,7 +219,7 @@ namespace HT.Framework
                         subrect.Set(rect.x + rect.width - size, rect.y, 20, 20);
                         if (GUI.Button(subrect, _editGC, "InvisibleButton"))
                         {
-                            MonoScriptToolkit.OpenMonoScript(stateType);
+                            CSharpScriptToolkit.OpenScript(stateType);
                         }
                         size += 20;
                     }

@@ -117,7 +117,7 @@ namespace HT.Framework
                     }
                     else
                     {
-                        Log.Error("输入的宏定义不能为空！");
+                        Log.Error("输入的脚本定义不能为空！");
                     }
                 }
                 if (GUILayout.Button("NO", EditorStyles.miniButtonRight, GUILayout.Width(30)))
@@ -144,7 +144,7 @@ namespace HT.Framework
                     GUILayout.FlexibleSpace();
                     if (GUILayout.Button("Use", EditorStyles.miniButton, GUILayout.Width(40)))
                     {
-                        _newDefine += _currentScriptingDefine.DefinedsRecord[i] + ";";
+                        _newDefine += $"{_currentScriptingDefine.DefinedsRecord[i]};";
                     }
                     GUILayout.EndHorizontal();
                 }
@@ -160,7 +160,7 @@ namespace HT.Framework
             /// <summary>
             /// 宏定义
             /// </summary>
-            public List<string> Defineds { get; } = new List<string>();
+            public HashSet<string> Defineds { get; } = new HashSet<string>();
             /// <summary>
             /// 宏定义记录
             /// </summary>
@@ -199,9 +199,9 @@ namespace HT.Framework
                 string[] defines = define.Split(';');
                 for (int i = 0; i < defines.Length; i++)
                 {
-                    if (defines[i] != "" && !Defineds.Contains(defines[i]))
+                    if (!string.IsNullOrEmpty(defines[i]) && !Defineds.Contains(defines[i]))
                     {
-                        Defined += defines[i] + ";";
+                        Defined += $"{defines[i]};";
                         Defineds.Add(defines[i]);
                     }
                 }
@@ -241,9 +241,9 @@ namespace HT.Framework
                 string[] defines = define.Split(';');
                 for (int i = 0; i < defines.Length; i++)
                 {
-                    if (defines[i] != "" && !DefinedsRecord.Contains(defines[i]))
+                    if (!string.IsNullOrEmpty(defines[i]) && !DefinedsRecord.Contains(defines[i]))
                     {
-                        DefinedRecord += defines[i] + ";";
+                        DefinedRecord += $"{defines[i]};";
                         DefinedsRecord.Add(defines[i]);
                     }
                 }
@@ -334,7 +334,7 @@ namespace HT.Framework
                         subrect.Set(rect.x + rect.width - 20, rect.y, 20, 20);
                         if (GUI.Button(subrect, _editGC, "InvisibleButton"))
                         {
-                            MonoScriptToolkit.OpenMonoScript(Target.DataModelTypes[index]);
+                            CSharpScriptToolkit.OpenScript(Target.DataModelTypes[index]);
                         }
                     }
                 }

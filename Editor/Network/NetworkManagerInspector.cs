@@ -58,7 +58,7 @@ namespace HT.Framework
                             int j = i;
                             if (Target.ChannelTypes.Contains(types[j].FullName))
                             {
-                                gm.AddDisabledItem(new GUIContent(types[j].FullName));
+                                gm.AddDisabledItem(new GUIContent(types[j].FullName), true);
                             }
                             else
                             {
@@ -98,7 +98,7 @@ namespace HT.Framework
                         subrect.Set(rect.x + rect.width - size, rect.y, 20, 20);
                         if (GUI.Button(subrect, _editGC, "InvisibleButton"))
                         {
-                            MonoScriptToolkit.OpenMonoScript(Target.ChannelTypes[index]);
+                            CSharpScriptToolkit.OpenScript(Target.ChannelTypes[index]);
                         }
                         size += 20;
                     }
@@ -143,13 +143,13 @@ namespace HT.Framework
             foreach (var channel in _helper.ProtocolChannels)
             {
                 GUILayout.BeginHorizontal();
-                GUILayout.Label(channel.Key.FullName + " [" + channel.Value.Protocol.ToString() + "]");
+                GUILayout.Label($"{channel.Key.FullName} [{channel.Value.Protocol}]");
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Space(20);
-                GUILayout.Label("IsConnect:" + channel.Value.IsConnect.ToString());
+                GUILayout.Label($"IsConnect:{channel.Value.IsConnect}");
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
             }

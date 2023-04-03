@@ -62,7 +62,7 @@ namespace HT.Framework
                             int j = i;
                             if (Target.ActivatedProcedures.Contains(types[j].FullName))
                             {
-                                gm.AddDisabledItem(new GUIContent(types[j].FullName));
+                                gm.AddDisabledItem(new GUIContent(types[j].FullName), true);
                             }
                             else
                             {
@@ -140,7 +140,7 @@ namespace HT.Framework
                         subrect.Set(rect.x + rect.width - size, rect.y, 20, 20);
                         if (GUI.Button(subrect, _editGC, "InvisibleButton"))
                         {
-                            MonoScriptToolkit.OpenMonoScript(Target.ActivatedProcedures[index]);
+                            CSharpScriptToolkit.OpenScript(Target.ActivatedProcedures[index]);
                         }
                         size += 20;
                     }
@@ -173,11 +173,11 @@ namespace HT.Framework
             base.OnInspectorRuntimeGUI();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Current Procedure: " + Target.CurrentProcedure.GetType().Name);
+            GUILayout.Label($"Current Procedure: {Target.CurrentProcedure.GetType().Name}");
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Procedures: " + _helper.Procedures.Count);
+            GUILayout.Label($"Procedures: {_helper.Procedures.Count}");
             GUILayout.EndHorizontal();
 
             foreach (var procedure in _helper.Procedures)

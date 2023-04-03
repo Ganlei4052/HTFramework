@@ -80,7 +80,7 @@ namespace HT.Framework
         /// <param name="y">视角y值</param>
         /// <param name="distance">视角距离</param>
         /// <param name="damping">阻尼缓动模式</param>
-        public void SetAngle(float x, float y, float distance, bool damping = true)
+        public void SetAngle(float x, float y, float distance, bool damping)
         {
             X = x;
             Y = y;
@@ -108,7 +108,7 @@ namespace HT.Framework
             if (!CanControl)
                 return;
 
-            if (!IsCanOnUGUI && GlobalTools.IsPointerOverUGUI())
+            if (!IsCanOnUGUI && UIToolkit.IsStayUINotWorld)
                 return;
 
             if (Main.m_Input.GetButton(InputButtonType.MouseRight))
@@ -169,7 +169,16 @@ namespace HT.Framework
                 transform.position = _position;
             }
 
-            //摄像机位置限制
+            //排斥盒检测
+            if (Manager.IsEnableRepelBox)
+            {
+                foreach (var box in Manager.FreeControlRepelBoxs)
+                {
+                    transform.position = box.Repel(transform.position);
+                }
+            }
+
+            //边界盒检测
             if (Manager.IsEnableBounds)
             {
                 //应用边界盒

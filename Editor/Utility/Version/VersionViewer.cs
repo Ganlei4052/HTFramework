@@ -101,17 +101,12 @@ namespace HT.Framework
                 GUILayout.EndHorizontal();
                 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label("Supported Unity Versions: " + _versionInfo.CurrentVersion.UnityVersions);
+                GUILayout.Label("Supported Unity Versions: " + _version.UnityVersions);
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
                 GUILayout.BeginHorizontal();
-                GUILayout.Label("Scripting Runtime Versions: " + _versionInfo.CurrentVersion.ScriptingVersions);
-                GUILayout.FlexibleSpace();
-                GUILayout.EndHorizontal();
-
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Api Compatibility Level: " + _versionInfo.CurrentVersion.APIVersions);
+                GUILayout.Label("Api Compatibility Level: " + _version.APIVersions);
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
 
@@ -168,11 +163,6 @@ namespace HT.Framework
             GUILayout.EndHorizontal();
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Scripting Runtime Versions: ", GUILayout.Width(180));
-            _releaseVersion.ScriptingVersions = EditorGUILayout.TextField(_releaseVersion.ScriptingVersions);
-            GUILayout.EndHorizontal();
-
-            GUILayout.BeginHorizontal();
             GUILayout.Label("Api Compatibility Level: ", GUILayout.Width(180));
             _releaseVersion.APIVersions = EditorGUILayout.TextField(_releaseVersion.APIVersions);
             GUILayout.EndHorizontal();
@@ -193,7 +183,7 @@ namespace HT.Framework
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Release", EditorStyles.miniButtonLeft))
             {
-                if (EditorUtility.DisplayDialog("Prompt", "Are you sure you want to release new version？Current version will be changed to [" + _releaseVersion.GetFullNumber() + "]!", "Yes", "No"))
+                if (EditorUtility.DisplayDialog("Prompt", $"Are you sure you want to release new version？Current version will be changed to [{_releaseVersion.GetFullNumber()}]!", "Yes", "No"))
                 {
                     _versionInfo.PreviousVersions.Add(_versionInfo.CurrentVersion);
                     _versionInfo.CurrentVersion = _releaseVersion;
